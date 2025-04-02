@@ -308,8 +308,8 @@
 </script>
 
 {%- if template contains 'collection' -%}
-    <script>
+  <script>
       const currentCollection = "{{ collection.handle }}";
       document.cookie = `currentCollection=${currentCollection}; path=/`;
-    </script>
+  </script>
 {%- endif -%}
