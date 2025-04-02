@@ -25,24 +25,15 @@
     {% capture combined_data %}
     [
       {% for color in color_order %}
-        {% paginate combined_products by 100 %}
         {% for combined_product in combined_products %}
-          {% for option in combined_product.options_with_values %}
-              {% if option.name == "Color" %}
-                {% assign color_values = option.values %}
-                {% for colorv in color_values %}
-                   {% assign colorc = colorv | downcase %}
-                   {% if color contains colorc %}
-                      {% assign mark = true %}
-                      {% assign markdata = combined_product %}
-                      {% assign merged_variant = merged_variant | concat:  combined_product.variants %}
-                      {% continue %}
-                   {% endif %}
-                {% endfor %}
-              {% endif %}
-          {% endfor %}
+          {% assign color_option_str = combined_product.options_by_name['color'].values | join: ', ' | downcase %}
+          {% if color_option_str contains color %}
+            {% assign mark = true %}
+            {% assign markdata = combined_product %}
+            {% assign merged_variant = merged_variant | concat: combined_product.variants %}
+            {% break %}
+          {% endif %}
         {% endfor %}
-        {% endpaginate %}
         {% if mark %}
         {% assign mark = false %}
         {
