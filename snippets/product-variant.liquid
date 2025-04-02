@@ -16,93 +16,79 @@
 -%}
 
 {%- if product.metafields.custom.combined_main_product != blank -%}
-  {%- assign combined_main_product = product.metafields.custom.combined_main_product.value -%}
-  {%- assign combined_products = combined_main_product.metafields.custom.combined_products.value -%}
-  {% assign merged_variant = "" | split: "" %}
-  {% assign unmerged_variant = "" | split: "" %}
-  {% assign mark = false %}
-  {% assign markdata = "" | split: "" %}
-  {% capture combined_data %}
+    {%- assign combined_main_product = product.metafields.custom.combined_main_product.value -%}
+    {%- assign combined_products = combined_main_product.metafields.custom.combined_products.value -%}
+    {% assign merged_variant = "" | split: "" %}
+    {% assign unmerged_variant = "" | split: "" %}
+    {% assign mark = false %}
+    {% assign markdata = "" | split: ""  %}
+    {% capture combined_data %}
     [
-    {% for color in color_order %}
-      {% paginate combined_products by 100 %}
+      {% for color in color_order %}
+        {% paginate combined_products by 100 %}
         {% for combined_product in combined_products %}
           {% for option in combined_product.options_with_values %}
-            {% if option.name == "Color" %}
-              {% assign color_values = option.values %}
-              {% for colorv in color_values %}
-                {% assign colorc = colorv | downcase %}
-                {% if color contains colorc %}
-                  {% assign mark = true %}
-                  {% assign markdata = combined_product %}
-                  {% assign merged_variant = merged_variant | concat: combined_product.variants %}
-                  {% continue %}
-                {% endif %}
-              {% endfor %}
-            {% endif %}
+              {% if option.name == "Color" %}
+                {% assign color_values = option.values %}
+                {% for colorv in color_values %}
+                   {% assign colorc = colorv | downcase %}
+                   {% if color contains colorc %}
+                      {% assign mark = true %}
+                      {% assign markdata = combined_product %}
+                      {% assign merged_variant = merged_variant | concat:  combined_product.variants %}
+                      {% continue %}
+                   {% endif %}
+                {% endfor %}
+              {% endif %}
           {% endfor %}
         {% endfor %}
-      {% endpaginate %}
-      {% if mark %}
+        {% endpaginate %}
+        {% if mark %}
         {% assign mark = false %}
         {
-          "handle": "{{ markdata.handle }}",
-          "options": {
+        "handle": "{{ markdata.handle }}",
+        "options": {
             "color": [
-              {% for option in markdata.options_with_values %}
+            {% for option in markdata.options_with_values %}
                 {% if option.name == "Color" %}
-                  {% assign color_values = option.values %}
-                  {% for color in color_values %}
-                    "{{ color }}"{% unless forloop.last %},
-                    {% endunless %}
-                  {% endfor %}
+                {% assign color_values = option.values %}
+                {% for color in color_values %}
+                    "{{ color }}"{% unless forloop.last %}, {% endunless %}
+                {% endfor %}
                 {% endif %}
-              {% endfor %}
+            {% endfor %}
             ],
             "size": [
             {% for option in markdata.options_with_values %}
-              {% if option.name == "Size" %}
+                {% if option.name == "Size" %}
                 {% assign size_values = option.values %}
                 {% for size in size_values %}
-                  "{{ size }}"{% unless forloop.last %},
-                  {% endunless %}
+                    "{{ size }}"{% unless forloop.last %}, {% endunless %}
                 {% endfor %}
-              {% endif %}
+                {% endif %}
             {% endfor %}
             ]
-          }
+        }
         },
         {% continue %}
-      {% endif %}
-    {% endfor %}
+        {% endif %}
+      {% endfor %}
     ]
-  {% endcapture %}
-  {% assign merged_variant = merged_variant | concat: unmerged_variant %}
-  {% assign combined_data = combined_data | remove_last: ',' | strip_newlines %}
+    {% endcapture %}
+    {% assign merged_variant = merged_variant | concat: unmerged_variant %}
+    {% assign combined_data = combined_data | remove_last: ',' | strip_newlines %}
 
 {% endif %}
 
-<div
-  class="productView-options{% if enable_border_top %} has-border-top{% endif %}{% if enable_border_bottom %} has-border-bottom{% endif %}"
-  style="--color-border: {{ color_border }}"
-  data-lang="{{ request.locale.iso_code | downcase }}"
-  data-default-lang="{{ localization.country.iso_code | downcase }}">
-  {%- if variantCount > 0 and product.has_only_default_variant != true -%}
-    <div
-      class="productView-variants halo-productOptions"
-      id="product-option-{{ product.id }}"
-      data-type="{{ picker_type }}">
-      {%- if picker_type == 'button' -%}
-        {%- assign product_swatch_option = settings.swatch | downcase -%}
-        {%- if product.metafields.custom.combined_main_product != blank -%}
-          <combie-variants
-            class="no-js-hidden product-option has-default"
-            data-product="{{ product.id }}"
-            data-section="{{ section.id }}"
-            data-url="{{ product.url }}"
-            data-product-variants-box>
-            {%- for option in product.options_with_values -%}
-              {%- liquid
+<div class="productView-options{% if enable_border_top %} has-border-top{% endif %}{% if enable_border_bottom %} has-border-bottom{% endif %}" style="--color-border: {{ color_border }}" data-lang="{{ request.locale.iso_code | downcase }}" data-default-lang="{{ localization.country.iso_code | downcase }}">
+    {%- if variantCount > 0  and product.has_only_default_variant != true -%}
+        <div class="productView-variants halo-productOptions" id="product-option-{{ product.id }}"  data-type="{{ picker_type }}">
+            {%- if picker_type == 'button' -%}
+                {%- assign product_swatch_option = settings.swatch | downcase -%}
+                {%- if product.metafields.custom.combined_main_product != blank -%}
+                <combie-variants class="no-js-hidden product-option has-default" data-product="{{ product.id }}" data-section="{{ section.id }}" data-url="{{ product.url }}" data-product-variants-box>
+                    {%- for option in product.options_with_values -%}
+                        {%- liquid
                             assign is_swatch = false
                             assign option_name = option.name | downcase
                             if product_swatch_option contains option_name
@@ -111,40 +97,34 @@
                             assign swatch_type = settings.swatch_type
                             assign option_index = forloop.index0
                         -%}
-              <fieldset
-                class="js product-form__input{% if is_swatch %} product-form__swatch{% endif %} clearfix"
-                data-product-attribute="set-rectangle"
-                data-option-index="{{ forloop.index0 }}">
-                <legend class="form__label">
-                  {{ option.name | append: ':' }}
-                  <span data-header-option>
-                    {{ option.selected_value }}
-                  </span>
-                  {%- if option.name == "Size" and show_size_chart and has_size_chart -%}
-                    <div class="productView-sizeChart">
-                      <a
-                        class="link link-underline"
-                        href="javascript:void(0)"
-                        data-open-size-chart-popup>
-                        {% render 'icon-size-chart-2' %}
-                        <span class="text">
-                          {{ 'size_chart.general.text' | t }}
-                        </span>
-                      </a>
-                    </div>
-                  {%- endif -%}
-                </legend>
-                {%- assign values = '' -%}
-                {%- liquid
+                        <fieldset class="js product-form__input{% if is_swatch %} product-form__swatch{% endif %} clearfix" data-product-attribute="set-rectangle" data-option-index="{{ forloop.index0 }}">
+                            <legend class="form__label">
+                                {{ option.name | append: ':' }}
+                                <span data-header-option>
+                                    {{ option.selected_value }}
+                                </span>
+                                {%- if option.name == "Size" and show_size_chart and has_size_chart -%}
+                                    <div class="productView-sizeChart">
+                                        <a class="link link-underline" href="javascript:void(0)" data-open-size-chart-popup>
+                                            {% render 'icon-size-chart-2' %}
+                                            <span class="text">
+                                                {{ 'size_chart.general.text' | t }}
+                                            </span>
+                                        </a>
+                                    </div>
+                                {%- endif -%}
+                            </legend>
+                            {%- assign values = '' -%}
+                            {%- liquid
                                 assign variants_available_arr = merged_variant | map: 'available'
                                 assign variants_option1_arr = merged_variant | map: 'option1'
                                 assign variants_option2_arr = merged_variant | map: 'option2'
                                 assign variants_option3_arr = merged_variant | map: 'option3'
                             -%}
-                {%- for variant in merged_variant -%}
-                  {%- assign value = variant.options[option_index] -%}
-                  {%- unless values contains value -%}
-                    {%- liquid
+                            {%- for variant in merged_variant -%}
+                                {%- assign value = variant.options[option_index] -%}
+                                {%- unless values contains value -%}
+                                    {%- liquid
                                         assign values = values | join: ';'
                                         assign values = values | append: ';' | append: value
                                         assign values = values | split: ';'
@@ -167,20 +147,18 @@
                                             endcase
                                         endfor
                                     -%}
-                    <input
-                      class="product-form__radio"
-                      type="radio"
-                      id="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
-                      name="{{ option.name }}"
-                      value="{{ value | escape }}"
-                      {% if option.selected_value == value %}checked{% endif %}
-                      {% if is_swatch and show_variant_image_group %}
-                      data-filter=".filter-{{ value | handle }}"
-                      data-metafields-vig="{{ variant.metafields.custom.variant_image_group }}"
-                      {% endif %}
-                      data-variant-id="{{ variant.id }}">
-                    {%- if is_swatch -%}
-                      {%- liquid
+                                    <input class="product-form__radio" type="radio" id="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                                        name="{{ option.name }}"
+                                        value="{{ value | escape }}"
+                                        {% if option.selected_value == value %}checked{% endif %}
+                                        {% if is_swatch and show_variant_image_group %}
+                                            data-filter=".filter-{{ value | handle }}"
+                                            data-metafields-vig="{{ variant.metafields.custom.variant_image_group }}"
+                                        {% endif %}
+                                        data-variant-id="{{ variant.id }}"
+                                    >
+                                    {%- if is_swatch -%}
+                                        {%- liquid
                                             assign enable_variant_image = false
                                             case swatch_type
                                                 when 'variant_image'
@@ -210,58 +188,45 @@
                                                     endif
                                             endcase
                                         -%}
-                      <label
-                        class="product-form__label swatch-label {{ option_stock }}"
-                        name="{{ option.name }}"
-                        for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
-                        data-variant-id="{{ variant.id }}">
-                        <span class="pattern {{ value | handle  }}"></span>
-                        {% if swatch_type == 'variant_image' and variant.image and false %}
-                          <span class="expand">
-                            <img
-                              srcset="{{ variant.image.src | product_img_url: '75x'}}"
-                              src="{{ variant.image.src | product_img_url: '75x'}}"
-                              sizes="75px"
-                              loading="lazy">
-                          </span>
-                        {% else %}
-                          <span class="tooltip">{{ value }}</span>
-                        {% endif %}
-                      </label>
-                    {%- else -%}
-                      <label
-                        class="product-form__label {{ option_stock }} {{ option.name | handle }}"
-                        for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
-                        data-variant-id="{{ variant.id }}">
-                        <span class="text">{{ value }}</span>
-                        {% if value == "Custom Size" %}
-                          <span class="customsize-free-text">
-                            {% if product.price_varies %}
-                              + $10
-                            {% else %}
-                              FREE
-                            {% endif %}
-                          </span>
-                        {% endif %}
-                      </label>
-                    {%- endif -%}
-                  {%- endunless -%}
-                {%- endfor -%}
-              </fieldset>
-            {%- endfor -%}
-            {% render 'product-variant-option', product: combined_main_product %}
-            <script type="application/json">
-              {{ combined_data }}
-            </script>
-          </combie-variants>
-        {% else %}
-          <variant-radios
-            class="no-js-hidden product-option has-default"
-            data-product="{{ product.id }}"
-            data-section="{{ section.id }}"
-            data-url="{{ product.url }}">
-            {%- for option in product.options_with_values -%}
-              {%- liquid
+                                        <label class="product-form__label swatch-label {{ option_stock }}" name="{{ option.name }}" for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}" data-variant-id="{{ variant.id }}">
+                                            <span
+                                                class="pattern {{ value | handle  }}"
+                                            ></span>
+                                            {% if swatch_type == 'variant_image' and variant.image and false %}
+                                                <span class="expand">
+                                                    <img srcset="{{ variant.image.src | product_img_url: '75x'}}" src="{{ variant.image.src | product_img_url: '75x'}}" sizes="75px" loading="lazy">
+                                                </span>
+                                            {% else %}
+                                                <span class="tooltip">{{ value }}</span>
+                                            {% endif %}
+                                        </label>
+                                    {%- else -%}   
+                                        <label class="product-form__label {{ option_stock }} {{ option.name | handle }}" for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}" data-variant-id="{{ variant.id }}">
+                                            <span class="text">{{ value }}</span>
+                                          {% if value == "Custom Size" %}
+                                            <span class="customsize-free-text">
+                                            {% if product.price_varies %}
+                                              + $10
+                                            {% else %}
+                                              FREE
+                                            {% endif %}
+                                            </span>
+                                          {% endif %}
+                                        </label>
+                                    {%- endif -%}
+                                {%- endunless -%}
+                            {%- endfor -%}
+                        </fieldset>
+                    {%- endfor -%}
+                    {% render 'product-variant-option', product: combined_main_product %}
+                    <script type="application/json">
+                    {{ combined_data }}
+                    </script>
+                </combie-variants>
+                {% else %}
+                <variant-radios class="no-js-hidden product-option has-default" data-product="{{ product.id }}" data-section="{{ section.id }}" data-url="{{ product.url }}">
+                    {%- for option in product.options_with_values -%}
+                        {%- liquid
                             assign is_swatch = false
                             assign option_name = option.name | downcase
                             if product_swatch_option contains option_name
@@ -270,27 +235,24 @@
                             assign swatch_type = settings.swatch_type
                             assign option_index = forloop.index0
                         -%}
-              <fieldset
-                class="js product-form__input{% if is_swatch %} product-form__swatch{% endif %} clearfix"
-                data-product-attribute="set-rectangle"
-                data-option-index="{{ forloop.index0 }}">
-                <legend class="form__label">
-                  {{ option.name | append: ':' }}
-                  <span data-header-option>
-                    {{ option.selected_value }}
-                  </span>
-                </legend>
-                {%- assign values = '' -%}
-                {%- liquid
+                        <fieldset class="js product-form__input{% if is_swatch %} product-form__swatch{% endif %} clearfix" data-product-attribute="set-rectangle" data-option-index="{{ forloop.index0 }}">
+                            <legend class="form__label">
+                                {{ option.name | append: ':' }}
+                                <span data-header-option>
+                                    {{ option.selected_value }}
+                                </span>
+                            </legend>
+                            {%- assign values = '' -%}
+                            {%- liquid
                                 assign variants_available_arr = product.variants | map: 'available'
                                 assign variants_option1_arr = product.variants | map: 'option1'
                                 assign variants_option2_arr = product.variants | map: 'option2'
                                 assign variants_option3_arr = product.variants | map: 'option3'
                             -%}
-                {%- for variant in product.variants -%}
-                  {%- assign value = variant.options[option_index] -%}
-                  {%- unless values contains value -%}
-                    {%- liquid
+                            {%- for variant in product.variants -%}
+                                {%- assign value = variant.options[option_index] -%}
+                                {%- unless values contains value -%}
+                                    {%- liquid
                                         assign values = values | join: ';'
                                         assign values = values | append: ';' | append: value
                                         assign values = values | split: ';'
@@ -313,20 +275,18 @@
                                             endcase
                                         endfor
                                     -%}
-                    <input
-                      class="product-form__radio"
-                      type="radio"
-                      id="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
-                      name="{{ option.name }}"
-                      value="{{ value | escape }}"
-                      {% if option.selected_value == value %}checked{% endif %}
-                      {% if is_swatch and show_variant_image_group %}
-                      data-filter=".filter-{{ value | handle }}"
-                      data-metafields-vig="{{ variant.metafields.custom.variant_image_group }}"
-                      {% endif %}
-                      data-variant-id="{{ variant.id }}">
-                    {%- if is_swatch -%}
-                      {%- liquid
+                                    <input class="product-form__radio" type="radio" id="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
+                                        name="{{ option.name }}"
+                                        value="{{ value | escape }}"
+                                        {% if option.selected_value == value %}checked{% endif %}
+                                        {% if is_swatch and show_variant_image_group %}
+                                            data-filter=".filter-{{ value | handle }}"
+                                            data-metafields-vig="{{ variant.metafields.custom.variant_image_group }}"
+                                        {% endif %}
+                                        data-variant-id="{{ variant.id }}"
+                                    >
+                                    {%- if is_swatch -%}
+                                        {%- liquid
                                             assign enable_variant_image = false
                                             case swatch_type
                                                 when 'variant_image'
@@ -356,103 +316,83 @@
                                                     endif
                                             endcase
                                         -%}
-                      <label
-                        class="product-form__label swatch-label {{ option_stock }}"
-                        name="{{ option.name }}"
-                        for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
-                        data-variant-id="{{ variant.id }}">
-                        <span class="pattern {{ value | handle  }}"></span>
-                        {% if swatch_type == 'variant_image' and variant.image and false %}
-                          <span class="expand">
-                            <img
-                              srcset="{{ variant.image.src | product_img_url: '75x'}}"
-                              src="{{ variant.image.src | product_img_url: '75x'}}"
-                              sizes="75px"
-                              loading="lazy">
-                          </span>
-                        {% else %}
-                          <span class="tooltip">{{ value }}</span>
-                        {% endif %}
-                      </label>
-                    {%- else -%}
-                      <label
-                        class="product-form__label {{ option_stock }}"
-                        for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}"
-                        data-variant-id="{{ variant.id }}">
-                        <span class="text">{{ value }}</span>
-                      </label>
-                    {%- endif -%}
-                  {%- endunless -%}
-                {%- endfor -%}
-              </fieldset>
-            {%- endfor -%}
-            <script type="application/json">
-              {{ product.variants | json }}
-            </script>
-          </variant-radios>
-        {% endif %}
-      {%- else -%}
-        <variant-selects
-          class="no-js-hidden product-option has-default"
-          data-product="{{ product.id }}"
-          data-section="{{ section.id }}"
-          data-url="{{ product.url }}">
-          {%- for option in product.options_with_values -%}
-            <div
-              class="product-form__input product-form__input--dropdown"
-              data-product-attribute="set-select"
-              data-option-index="{{ forloop.index0 }}">
-              <label class="form__label" for="option-{{ forloop.index0 }}">
-                {{ option.name | append: ':' }}
-                <span data-header-option>
-                  {{ option.selected_value }}
-                </span>
-              </label>
-              <div class="form__select select">
-                <select
-                  id="option-{{ forloop.index0 }}"
-                  class="select__select"
-                  name="options[{{ option.name | escape }}]">
-                  {%- for value in option.values -%}
-                    <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
-                      {{ value }}
-                    </option>
-                  {%- endfor -%}
-                </select>
-              </div>
-            </div>
-          {%- endfor -%}
-          <script type="application/json">
-            {{ product.variants | json }}
-          </script>
-        </variant-selects>
-      {%- endif -%}
-    </div>
-    <noscript>
-      <div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
-        <label class="form__label" for="Variants-{{ section.id }}">
-          {{ 'products.product.product_variants' | t }}
-        </label>
-        <div class="select">
-          <select
-            name="id"
-            id="Variants-{{ section.id }}"
-            class="select__select"
-            form="product-form">
-            {%- for variant in product.variants -%}
-              <option
-                {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
-                {% if variant.available == false %}disabled{% endif %}
-                value="{{ variant.id }}">
-                {{ variant.title }}
-                {%- if variant.available == false %}
-                  - {{ 'products.product.sold_out' | t }}{% endif %}
-                - {{ variant.price | money | strip_html }}
-              </option>
-            {%- endfor -%}
-          </select>
+                                        <label class="product-form__label swatch-label {{ option_stock }}" name="{{ option.name }}" for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}" data-variant-id="{{ variant.id }}">
+                                            <span
+                                                class="pattern {{ value | handle  }}"
+                                            ></span>
+                                            {% if swatch_type == 'variant_image' and variant.image and false %}
+                                                <span class="expand">
+                                                    <img srcset="{{ variant.image.src | product_img_url: '75x'}}" src="{{ variant.image.src | product_img_url: '75x'}}" sizes="75px" loading="lazy">
+                                                </span>
+                                            {% else %}
+                                                <span class="tooltip">{{ value }}</span>
+                                            {% endif %}
+                                        </label>
+                                    {%- else -%}   
+                                        <label class="product-form__label {{ option_stock }}" for="option-{{ product.id }}-{{ option.name }}-{{ forloop.index0 }}" data-variant-id="{{ variant.id }}">
+                                            <span class="text">{{ value }}</span>
+                                        </label>
+                                    {%- endif -%}
+                                {%- endunless -%}
+                            {%- endfor -%}
+                        </fieldset>
+                    {%- endfor -%}
+                    <script type="application/json">
+                        {{ product.variants | json }}
+                    </script>
+                </variant-radios>
+                {% endif %}
+            {%- else -%}
+                <variant-selects class="no-js-hidden product-option has-default" data-product="{{ product.id }}" data-section="{{ section.id }}" data-url="{{ product.url }}">
+                    {%- for option in product.options_with_values -%}
+                        <div class="product-form__input product-form__input--dropdown" data-product-attribute="set-select" data-option-index="{{ forloop.index0 }}">
+                            <label class="form__label" for="option-{{ forloop.index0 }}">
+                                {{ option.name | append: ':' }}
+                                <span data-header-option>
+                                    {{ option.selected_value }}
+                                </span>
+                            </label>
+                            <div class="form__select select">
+                                <select id="option-{{ forloop.index0 }}"
+                                    class="select__select"
+                                    name="options[{{ option.name | escape }}]"
+                                >
+                                    {%- for value in option.values -%}
+                                        <option value="{{ value | escape }}" {% if option.selected_value == value %}selected="selected"{% endif %}>
+                                            {{ value }}
+                                        </option>
+                                    {%- endfor -%}
+                                </select>
+                            </div>
+                        </div>
+                    {%- endfor -%}
+                    <script type="application/json">
+                        {{ product.variants | json }}
+                    </script>
+                </variant-selects>
+            {%- endif -%}
         </div>
-      </div>
-    </noscript>
-  {%- endif -%}
+        <noscript>
+            <div class="product-form__input{% if product.has_only_default_variant %} hidden{% endif %}">
+                <label class="form__label" for="Variants-{{ section.id }}">
+                    {{ 'products.product.product_variants' | t }}
+                </label>
+                <div class="select">
+                <select name="id" id="Variants-{{ section.id }}" class="select__select" form="product-form">
+                    {%- for variant in product.variants -%}
+                        <option
+                            {% if variant == product.selected_or_first_available_variant %}selected="selected"{% endif %}
+                            {% if variant.available == false %}disabled{% endif %}
+                            value="{{ variant.id }}"
+                        >
+                            {{ variant.title }}
+                            {%- if variant.available == false %} - {{ 'products.product.sold_out' | t }}{% endif %}
+                            - {{ variant.price | money | strip_html }}
+                        </option>
+                    {%- endfor -%}
+              </select>
+            </div>
+          </div>
+        </noscript>
+    {%- endif -%}
 </div>
