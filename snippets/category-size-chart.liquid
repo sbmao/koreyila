@@ -1,0 +1,113 @@
+{% assign sizechart_type = "prom" %}
+{% assign sizechart = shop.metaobjects.size_chart[sizechart_type] %}
+{% assign sizechart_config = sizechart.config.value %}
+
+<section>
+    <div class="switch">
+      <div data-target="inch" class="switch-button on"><span class="inch-button">inch</span></div>
+      <div data-target="cm" class="switch-button"><span class="cm-button">cm</span></div>
+    </div>
+    <div class="size_chart-top">
+      {% for unitsSet in sizechart_config["unitsSet"] %}
+        <table class="size_chart-tb {{ unitsSet[0] | downcase  }} {% if unitsSet[0] == "inch" %}current{% endif %}">
+          <thead>
+            <tr>
+                <th>US Size ({{ unitsSet[0] | downcase  }})</th>
+                {% for propertySet in sizechart_config.propertySet %}
+                <th>{{ propertySet[1] | capitalize }}</th>
+                {% endfor %}
+            </tr>
+          </thead>
+          <tbody>
+            {% for sizeSet in sizechart_config.sizeSet %}
+              <tr>
+                <td>US {{ sizeSet[0] }}</td>
+                {% for propertySet in sizechart_config.propertySet %}
+                  <td>{{ sizechart_config[unitsSet[0]][propertySet[0]][sizeSet[0]]['size_value'] }}</td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      {% endfor %}
+    </div>
+    <div class="size_chart-bottom">
+      <p class="note-color">Note:</p>
+      <p>
+        <span class="note-color">•</span>The size chart reflects actual body measurements. Please choose a size that aligns with your own measurements, as the dress is designed to provide some stretching room for the wearer.
+      </p>
+      <p>
+        <span class="note-color">•</span>The hollow-to-hem measurement of our standard sized floor length dresses already includes an additional 2 inches (ca. 5 cm) to accommodate high heels (including those with Sweep/Court/Chapel/Watteau Train).
+      </p>
+      <p>
+        <span class="note-color">•</span>Please note that the size chart serves as a general sizing guide. Specific measurements may vary with each style.
+      </p>
+    </div>
+  </section>
+  <hr style="margin: 20px 0;">
+  <section>
+    <div class="size_chart-desc">
+      <img
+        alt="Prom Dresses Size Measure Guide"
+        src="https://cdn.shopify.com/s/files/1/0892/8745/9131/files/floor-length-measure.jpg?v=1726199938"
+      >
+      <h3>Bust</h3>
+      <p>
+        <span class="note-color">•</span>&nbsp;This is different from your Bra Size.<br>
+        <span class="note-color">•</span>&nbsp;Wear an unpadded Bra (dresses all have a built-in bra)<br>
+        <span class="note-color">•</span>&nbsp;Breathe naturally and have arms relax at sides<br>
+        <span class="note-color">•</span>&nbsp;Take your tape and measure around the bust at the fullest point<br>
+        <span class="note-color">•</span>&nbsp;Make sure the tape measure is level all the way around<br>
+        <span class="note-color">•</span>&nbsp;remember to keep your index finger between you and the tape to avoid
+        being too tight
+      </p>
+      <h3>Waist</h3>
+      <p>
+        <span class="note-color">•</span>&nbsp;Measure around the narrowest part of your waist at the natural waistline<br>
+        <span class="note-color">•</span>&nbsp;Simply bend to one side to find a crease which is your waistline<br>
+        <span class="note-color">•</span>&nbsp;Do not hold your breath. Breathe naturally<br>
+        <span class="note-color">•</span>&nbsp;Keep the tape measure parallel to the floor <br>
+        <span class="note-color">•</span>&nbsp;Keep the tape slightly loose to leave breathing room
+      </p>
+      <h3>Hips</h3>
+      <p>
+        <span class="note-color">•</span>&nbsp;Stand naturally with your feet together<br>
+        <span class="note-color">•</span>&nbsp;Measure around your hip at your fullest part of your bottom<br>
+        <span class="note-color">•</span>&nbsp;Simply record the maxim from a couple of measurements when you are not
+        sure<br>
+        <span class="note-color">•</span>&nbsp;Please pay much attention to the hip size when you need a mermaid dress
+      </p>
+      <h3>Hollow to Hem</h3>
+      <p>
+        <span class="note-color">•</span>&nbsp;Stand straight with bare feet together<br>
+        <span class="note-color">•</span>&nbsp;Began at the hollow space between the collarbones and pull tape straight
+        down to where your dress hem should hit(including train if there is one)
+      </p>
+    </div>
+  </section>
+  <script>
+    (() => {
+      const btns = document.querySelectorAll('.switch-button');
+      const tbs = document.querySelectorAll('.size_chart-tb');
+      btns.forEach(btn => {
+        btn.addEventListener('click', (event) => {
+          event.preventDefault();
+          btns.forEach(btn => btn.classList.toggle('on'));
+          tbs.forEach(tb => tb.classList.toggle('current'));
+        });
+      });
+    })();
+  </script>
+  <div data-loading-spinner="" class="loading-overlay__spinner hidden">
+    <svg
+      xmlns="http://www.w3.org/2000/svg"
+      viewBox="0 0 66 66"
+      class="spinner"
+      role="presentation"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <circle r="30" cy="33" cx="33" stroke-width="6" fill="none" class="path"></circle>
+    </svg>
+  </div>
+

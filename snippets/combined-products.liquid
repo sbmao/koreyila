@@ -1,0 +1,59 @@
+{%- liquid
+    assign combined_main_product = product.metafields.custom.combined_main_product.value
+    assign merged_variant = product.variants
+    assign color_order = "as picture,picture,emerald,ice blue,french blue,sand,bronzer,burgundy,red,dark navy,royal blue,sky blue,black,pearl pink,dusty rose,blushing pink,grape,champagne,white,silver,dark green,steel blue,dusty blue,slate blue,stormy,ink blue,navy blue,ocean blue,light blue,mist,pool,spa,petal,coral,blush,candy pink,dusty lavender,fuchsia,orchid,dusk,vintage mauve,mauve,wisteria,tahiti,lilac,lavender,regency,plum,claret,cabernet,mulberry,cinnamon rose,vermilion,desert rose,watermelon,hunter green,peacock,jade,basil,turquoise,mint green,sage green,agave,celadon,sage,lime green,clover,taupe,ivory,steel grey,daffodil,gold,orange,papaya,chocolate,brown"  | split: ","
+    assign sorted_products = "" | split: ""
+    assign sorted_product_array = "" | split: ""
+-%}
+
+{%- if combined_main_product != blank -%}
+    {% assign combined_products = combined_main_product.metafields.custom.combined_products.value %}
+    {% assign products_with_sort_values = "" | split: "" %}
+    {% assign products_with_options = "" | split: "" %}
+    {% assign product_main_color = product.options_with_values | where: "name", "Color" | first | last %}
+    {% assign product_main_color_index = 1 %}
+     {% assign notebooks = null | sort %}
+
+    {% for combined_product in combined_products %}
+        {% assign product_handle = combined_product.handle %}
+        {% assign product_color = combined_product.options_with_values | where: "name", "Color" | map: "values" | first %}
+        {% assign product_color_downcase = product_color | downcase%}
+        {% assign product_size = combined_product.options_with_values  | where: "name", "Size" | map: "values" | join: ', ' %}
+        {% capture product_object %}
+        {
+            "handle": {{ product_handle }},
+            "options": {
+                "color": {{  product_color }},
+                "size":  {{ product_size }}
+            }
+        }
+        {% endcapture %}
+        
+
+      
+        <!-- 将产品对象添加到产品数组中 -->
+        {% assign  product_object = product_object | sort %}
+        {% assign products_with_options = products_with_options | concat:  product_object %}
+
+        {% assign color_index = color_order | index_of: product_color_downcase %}
+
+        {% if color_index == -1 %}
+            {% assign color_index = color_order.size | plus: 1 %}
+        {% endif %}
+        {% if product_color == product_main_color %}
+            {% assign product_main_color_index = color_index %} 
+        {% endif %}
+
+        {% assign products_with_sort_values = products_with_sort_values | push: product_color | push: color_index | push: product %}
+    {% endfor %}
+    
+    {% assign sorted_products = products_with_sort_values | sort: "1" %}
+
+    {% for item in sorted_products %}
+        {% assign sorted_product = item[2] %}
+        {% assign sorted_product_array = sorted_product_array | push: sorted_product %}
+        {% assign merged_variant = merged_variant | concat: sorted_product.variants %}
+    {% endfor %}
+    {{ sorted_product_array }}
+    
+{% endif %}

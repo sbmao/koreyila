@@ -1,0 +1,357 @@
+
+.halo-size-chart {
+  padding: 10px 10px 10px;
+}
+
+.halo-size-chart img {
+  width: 100%;
+  margin: 0 15px 0px 0;
+}
+
+.halo-size-chart-popup .halo-popup-wrapper {
+  padding: 0;
+}
+
+.halo-size-chart-popup .halo-popup-content {
+  font-size: 15px;
+  line-height: 1.5;
+}
+
+.halo-size-chart-popup h3,
+.halo-size-chart-popup h4,
+.halo-size-chart-popup h5 {
+  font-family: var(--font-body-family);
+  font-weight: 500;
+}
+
+@media screen and (max-width: 767px) {
+  .halo-size-chart-popup .halo-popup-title {
+    font-weight: 500;
+  }
+
+  .halo-size-chart-popup .halo-popup-content {
+    font-size: 14px;
+  }
+}
+
+.halo-size-chart-popup .halo-popup-wrapper .halo-popup-header {
+  border-bottom: 1px solid #e6e6e6;
+  padding-top: 5px;
+  padding-bottom: 3px;
+  margin-bottom: 0;
+}
+
+.halo-size-chart .size_chart-tb th {
+  font-weight: 500;
+}
+
+body.size-chart-show {
+  overflow: hidden;
+}
+
+body.size-chart-show .background-overlay {
+  opacity: 1;
+  pointer-events: all;
+  z-index: 101;
+}
+
+body.size-chart-show .halo-size-chart-popup.is-show {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+  transform: translate3d(0, 0, 0);
+  z-index: 103;
+}
+
+@media screen and (min-width: 768px) {
+  body.size-chart-show .halo-size-chart-popup.is-show {
+    transform: translate3d(-50%, -50%, 0);
+  }
+}
+
+.halo-size-chart .switch {
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
+.halo-size-chart .switch-button {
+  min-width: 72px;
+  background: #fff;
+  border: 1px solid #ccc;
+  padding: 7px 15px;
+  border-radius: 4px;
+  text-align: center;
+  text-transform: uppercase;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.halo-size-chart .switch-button.on {
+  background: #000000;
+  color: #ffffff;
+}
+
+.halo-size-chart .size_chart-top {
+  width: 100%;
+}
+
+.halo-size-chart .size_chart-tb {
+  border-collapse: collapse;
+  width: 100%;
+  text-align: center;
+}
+
+.halo-size-chart .size_chart-bottom,
+.halo-size-chart .size_chart-add {
+  text-align: left;
+  line-height: 16px;
+}
+
+.halo-size-chart-popup .size_chart-desc {
+  text-align: left;
+}
+
+.halo-size-chart-popup a {
+  color: var(--theme-color);
+}
+
+.halo-size-chart .size_chart-tb:not(.current) {
+  display: none;
+}
+
+.halo-size-chart .size_chart-tb td,
+.halo-size-chart .size_chart-tb th {
+  border: 1px solid #ddd;
+  padding-top: 7px;
+  padding-bottom: 7px;
+}
+
+.halo-size-chart .size_chart-tb tr:nth-child(even) {
+  background-color: #f6f6f6;
+}
+
+.halo-size-chart .size_chart-tb tr:hover {
+  background-color: #fcf3f0;
+}
+
+.halo-size-chart .size_chart-tb th {
+  background-color: #000000;
+  color: #ffffff;
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+.halo-size-chart .note-color {
+  color: #000000;
+}
+
+table {
+  border-collapse: collapse;
+  border: 1px solid #ebebeb;
+  min-width: 100%;
+}
+
+.c-tabs__tabs {
+  margin-bottom: 15px !important;
+  position: relative;
+  overflow-x: auto;
+  white-space: nowrap;
+}
+
+.c-tabs__tabs::after {
+  content: "";
+  position: absolute;
+  left: 0;
+  width: 100%;
+  bottom: 2px;
+  border-bottom: 1px solid #000;
+}
+
+.c-tabs__tabs .c-tabs__tab {
+  display: inline;
+  margin-bottom: 0.25em;
+}
+
+.c-tabs__tabs .c-tabs__tab .c-tabs__item {
+  text-transform: capitalize;
+  margin: 0 0.6em 0 0;
+  padding-bottom: 0;
+  font-size: 1em;
+  border-bottom: 5px solid transparent;
+  color: #767676;
+  display: inline-block;
+  letter-spacing: 0.071rem;
+  transition: all 0.3s ease;
+}
+
+.c-tabs__tabs .active .c-tabs__item {
+  color: #000;
+  border-color: #000;
+}
+
+.c-tabs__panels .c-tabs__panel:not(.selected) {
+  display: none;
+}
+
+.sizechart_incm:not(.selected) {
+  display: none;
+}
+
+.sizechart_incm table {
+  margin-bottom: 5px;
+  border-width: 0px 0 0 0px;
+}
+
+.sizechart_incm tr:nth-child(2n + 1) {
+  background-color: #eaeaea;
+}
+
+.sizechart_incm tr {
+  line-height: 1.5;
+}
+
+table th {
+  font-size: 11px;
+  text-transform: uppercase;
+  font-weight: 700;
+}
+
+.sizechart_incm tr th {
+  background-color: #c6c6c6;
+  text-transform: uppercase;
+  padding: 5px 10px;
+  text-align: center;
+  border: 1px solid #fff;
+  color: #333;
+}
+
+.sizechart_incm tr td {
+  padding: 5px 10px;
+  text-align: center;
+  border: 1px solid #fff;
+}
+
+.sizechart_incm tr:hover td {
+  background-color: #ccc;
+}
+
+.sizechart_incm tr:hover td:hover {
+  background-color: #333;
+  color: #fff;
+}
+
+.u-pad-horiz {
+  padding-left: 15px;
+  padding-right: 15px;
+  font-size: 13px;
+  color: #3d4246;
+  margin-top: 15px;
+}
+
+.u-margin-horiz {
+  margin-left: 15px;
+  margin-right: 15px;
+  margin-bottom: 0.5rem;
+  display: inline;
+}
+
+label {
+  font-size: var(--font_size);
+  font-weight: 600;
+  line-height: var(--font_size_plus8);
+  color: var(--page_title_color);
+}
+
+.c-tabs__panels .u-margin-horiz input {
+  padding: 0;
+  border-radius: 50%;
+  line-height: normal;
+  background-color: #999;
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  clip: auto;
+  position: relative;
+  border: 1px solid #666;
+  appearance: auto;
+}
+
+.c-exp {
+  border-top: 1px solid #000;
+  border-bottom: 1px solid #000;
+  margin-top: 15px;
+}
+
+.c-exp__open {
+  display: block;
+  padding: 20px 0;
+  cursor: pointer;
+  text-decoration: none;
+  color: #000;
+}
+
+.c-exp #htm-content-measure {
+  padding-bottom: 20px;
+}
+
+.c-exp__body .o-cols::after,
+.c-exp__body .o-cols::before {
+  display: table;
+  content: " ";
+  clear: both;
+}
+
+.how-to-tabs .how-to-tab.active {
+  background-color: #d4d4d4;
+  -webkit-box-shadow: inset 0 3px 5px rgba(0, 0, 0, 0.125);
+  box-shadow: inset 0 3px 5px #00000020;
+}
+
+.how-to-tabs {
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.how-to-tabs .how-to-tab {
+  background-color: #fff;
+  padding: 5px 30px;
+  border: 1px solid #999;
+  cursor: pointer;
+}
+
+.how-to-panel {
+  display: none;
+}
+
+.how-to-panels .selected {
+  display: block;
+}
+
+.c-exp__body .o-cols .o-col--1-3 {
+  width: 33%;
+  float: left;
+}
+
+.c-exp__body .o-cols .o-col--2-3 p {
+  color: #3d4246;
+  font-size: 13px;
+}
+
+@media (max-width: 767px) {
+  .c-exp__body .o-cols .o-col--1-3 {
+    width: 100%;
+  }
+  .c-exp__body .o-cols .o-col--2-3 {
+    width: 100%;
+  }
+}
+
+@media (min-width: 768px) {
+  .how-to-panels .video-leo {
+    width: 100%;
+    height: 257px;
+  }
+}

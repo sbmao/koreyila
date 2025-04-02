@@ -1,0 +1,220 @@
+{%- liquid
+    assign variant_selected = variant_selected | handleize
+    assign variantCount = product.variants | size
+    assign swatch_type = settings.swatch_type
+    assign colorList = ''
+    assign color = ''
+    assign count = 0
+-%}
+{%- if product.metafields.custom.combined_main_product != blank -%}
+    {% assign product_color_option = product.options_with_values | where: "name", "Color" | first %}
+    {% assign product_color = product_color_option.values | first %}
+    {%- assign combined_main_product = product.metafields.custom.combined_main_product.value -%}
+    {%- assign combined_products = combined_main_product.metafields.custom.combined_products.value -%}
+
+    {% assign combine_products_index = "0" %}
+    {% assign combine_variant_count = 0 %}
+    {% assign combine_variant_match_index = -1 %}
+    {% paginate combined_products by 100 %}
+      {% for combined_product in combined_products %}
+          {% assign combined_product_color_option = combined_product.options_with_values | where: "name", "Color" | first %}
+          {% assign combined_product_color = combined_product_color_option.values | first %}
+  
+          {% if product_color == combined_product_color %}
+              {% assign combine_variant_match_index = forloop.index %}
+          {% endif %}
+          {% assign combine_variant_count = combine_variant_count | plus: 1 %}
+      {% endfor %}
+    {% endpaginate %}
+
+    {% assign flag_mid = combine_variant_count | divided_by:2 %}
+    {% assign flag_end = combine_variant_count | minus: 2 %}
+    {% assign display_start = 1 %}
+    {% assign display_end = combine_variant_count %}
+    {% if combine_variant_count < 5 %}
+      {% assign display_start = 1%}
+      {% assign display_end = 5 %}
+    {% elsif combine_variant_match_index <= 5 %}
+      {% assign display_start = 1%}
+      {% assign display_end = 5 %}
+    {% elsif combine_variant_match_index == combine_variant_count %}
+      {% assign display_start = combine_variant_count | minus:4 %}
+      {% assign display_end = combine_variant_match_index %}
+    {% elsif combine_variant_match_index <= flag_mid or combine_variant_match_index < flag_end %}
+      {% assign display_start = combine_variant_match_index | minus:2 %}
+      {% assign display_end = combine_variant_match_index | plus:2 %}
+    {% elsif combine_variant_match_index >= flag_end %}
+      {% assign display_start = combine_variant_count | minus:5 %}
+      {% assign display_end = combine_variant_count | minus:1 %}
+    {% endif %}
+
+    <div class="card-swatch text-{{ settings.product_content_text_align }} clearfix{% if settings.quick_shop_type == '2' %} quick_shop_type_2{% endif %}" id="product-swatch-{{ product.id }}">
+        <ul class="swatch list-unstyled">
+          {% paginate combined_products by 100 %}
+            {%- for combined_product in combined_products -%}
+                {% if forloop.index >= display_start and forloop.index <= display_end %}
+
+                  {% assign variant = combined_product.variants | first %}
+                  {%- capture color -%}
+                      {{ variant.options[index] }}
+                  {%- endcapture -%}
+                  {%- unless colorList contains color -%}
+                      {%- liquid
+                          assign text = color | handleize
+                          assign enable_variant_image = false
+                          case swatch_type
+                              when 'variant_image'
+                                  assign background_image = variant.image.src | product_img_url: '40x'
+                                  if variant.image
+                                      assign enable_variant_image = true
+                                  endif
+                              when 'color'
+                                  assign background_image = color | handle | append: '.png' | file_url
+                                  assign enable_variant_image = true
+                              when 'metafields'
+                                  assign variant_color = variant.metafields.custom.variant_color
+                                  assign color_codes = false
+  
+                                  if variant_color
+                                      assign enable_variant_image = true
+                                  
+                                      if variant_color contains '#' or variant_color contains 'rgb' or variant_color contains 'hsl'
+                                          assign color_codes = true
+                                          assign background_color = variant_color
+                                      else
+                                          assign background_image = variant_color | append: '.png' | file_url
+                                      endif
+                                  elsif variant.image
+                                      assign enable_variant_image = true
+                                      assign background_image = variant.image.src | product_img_url: '40x'
+                                  endif
+                          endcase
+                      -%}
+                      {%- if count < 5 -%}
+                          <li class="item">
+                              <div class="item-wrapper clearfix">
+                                  <label title="{{ combined_product.title }}" {% if product.options_with_values.size == 1 %}data-with-one-option="{{ variant.id }}" data-quantity="{% if variant.available %}1{% else %}0{% endif %}" {% endif %} class="swatch-label{% if combine_variant_match_index == forloop.index %}{{ " is-active " }}{% endif %}{% if settings.show_quick_shop %}{% unless settings.quick_shop_type == '2' %}{% if variant_selected != blank %}{% if variant_selected == text %} is-active{% endif %}{% else %}{% if count == 0 %} is-active{% endif %}{% endif %}{% endunless %}{% endif %}{% if product.options_with_values.size == 1 and variant.unavailable %} is-soldout{% endif %}" data-value="{{ text }}" data-handle='{{combined_product.handle }}' data-variant-id="{{ variant.id }}" title="{{ color | strip }}" {% if variant.image != null -%} data-variant-img="{{ variant.image.src | product_img_url: '800x' }}"{% endif %}>
+                                      <span
+                                          class="pattern {{ color | handle  }}"
+                                      ></span>
+                                      {{ text }}
+                                  </label>
+                                  <span class="tooltip">{{ color | escape }}</span>
+                              </div>
+                          </li>
+                      {%- else -%}
+                          {%- if count == 5 -%}
+                              <li class="group-swatch" style="display: none">
+                          {%- endif -%}
+                              <div class="item-wrapper clearfix {% if combine_variant_match_index == forloop.index %}{{ "is-active" }}{% endif %}">
+                                  <label title="{{ combined_product.title }}" {% if product.options_with_values.size == 1 %} data-with-one-option="{{ variant.id }}" data-quantity="{% if variant.available %}1{% else %}0{% endif %}"{% endif %} class="swatch-label{% if combine_variant_match_index == forloop.index %}{{ " is-active " }}{% endif %}{% if settings.show_quick_shop %}{% unless settings.quick_shop_type == '2' %}{% if variant_selected != blank %}{% if variant_selected == text %} is-active{% endif %}{% else %}{% if count == 0 %} is-active{% endif %}{% endif %}{% endunless %}{% endif %}{% if product.options_with_values.size == 1 and variant.unavailable %} is-soldout{% endif %}" data-value="{{ text }}" data-handle='{{combined_product.handle }}' data-variant-id="{{ variant.id }}" title="{{ color | strip }}" {% if variant.image != null %} data-variant-img="{{ variant.image.src | product_img_url: '800x' }}"{% endif %}>
+                                      <span
+                                          class="pattern {{ color | handle  }}"
+                                      ></span>
+                                      {{ text }}
+                                  </label>
+                                  <span class="tooltip">{{ color | escape }}</span>
+                              </div>
+                          {%- if forloop.last -%}
+                              </li>
+                          {%- endif -%}
+                      {%- endif -%}
+                      {%- assign count = count | plus : 1 -%}
+                      {%- capture tempList -%}
+                          {{ colorList | append: color | append: ' ' }}
+                      {%- endcapture -%}
+                      {%- assign colorList = tempList -%}
+                  {%- endunless -%}
+                {% endif %}
+            {%- endfor -%}
+          {% endpaginate %}
+          {%- if combine_variant_count > 5 -%}
+              <li class="item-more-swatch item"><button type="button" class="number-showmore" title="More Color"> <span class="text-number">+{{ combine_variant_count }}</span></button></li>
+          {%- endif -%}
+        </ul>
+    </div>
+
+{%- elsif variantCount > 0 and combine_variants.first.title != 'Default Title' -%}
+
+    <div class="card-swatch text-{{ settings.product_content_text_align }} clearfix{% if settings.quick_shop_type == '2' %} quick_shop_type_2{% endif %}" id="product-swatch-{{ product.id }}">
+        <ul class="swatch list-unstyled">
+            {%- for variant in combine_variants -%}
+                {%- capture color -%}
+                    {{ variant.options[index] }}
+                {%- endcapture -%}
+                {%- unless colorList contains color -%}
+                    {%- liquid
+                        assign text = color | handleize
+                        assign enable_variant_image = false
+                        case swatch_type
+                            when 'variant_image'
+                                assign background_image = variant.image.src | product_img_url: '40x'
+                                if variant.image
+                                    assign enable_variant_image = true
+                                endif
+                            when 'color'
+                                assign background_image = color | handle | append: '.png' | file_url
+                                assign enable_variant_image = true
+                            when 'metafields'
+                                assign variant_color = variant.metafields.custom.variant_color
+                                assign color_codes = false
+
+                                if variant_color
+                                    assign enable_variant_image = true
+                                
+                                    if variant_color contains '#' or variant_color contains 'rgb' or variant_color contains 'hsl'
+                                        assign color_codes = true
+                                        assign background_color = variant_color
+                                    else
+                                        assign background_image = variant_color | append: '.png' | file_url
+                                    endif
+                                elsif variant.image
+                                    assign enable_variant_image = true
+                                    assign background_image = variant.image.src | product_img_url: '40x'
+                                endif
+                        endcase
+                    -%}
+                    {%- if count < 4 -%}
+                        <li class="item">
+                            <div class="item-wrapper clearfix">
+                                <label{% if product.options_with_values.size == 1 %} data-with-one-option="{{ variant.id }}" data-quantity="{% if variant.available %}1{% else %}0{% endif %}" {% endif %} class="swatch-label{% if settings.show_quick_shop %}{% unless settings.quick_shop_type == '2' %}{% if variant_selected != blank %}{% if variant_selected == text %} is-active{% endif %}{% else %}{% if count == 0 %} is-active{% endif %}{% endif %}{% endunless %}{% endif %}{% if product.options_with_values.size == 1 and variant.unavailable %} is-soldout{% endif %}" data-value="{{ text }}" data-variant-id="{{ variant.id }}" title="{{ color | strip }}" {% if variant.image != null -%} data-variant-img="{{ variant.image.src | product_img_url: '800x' }}"{% endif %}>
+                                    <span
+                                        class="pattern"
+                                        style="background-color: {{ color | split: ' ' | last | handle }};{% if enable_variant_image %}{% if swatch_type == 'metafields' %}{% if color_codes %} background: {{ background_color }}{% else %} background: url({{ background_image }}); background-size: cover;{% endif %}{% else %} background-image: url({{ background_image }});{% endif %}{% endif %}"
+                                    ></span>
+                                    {{ text }}
+                                </label>
+                                <span class="tooltip">{{ color | escape }}</span>
+                            </div>
+                        </li>
+                    {%- else -%}
+                        {%- if count == 4 -%}
+                            <li class="group-swatch" style="display: none">
+                        {%- endif -%}
+                            <div class="item-wrapper clearfix">
+                                <label{% if product.options_with_values.size == 1 %} data-with-one-option="{{ variant.id }}" data-quantity="{% if variant.available %}1{% else %}0{% endif %}"{% endif %} class="swatch-label{% if settings.show_quick_shop %}{% unless settings.quick_shop_type == '2' %}{% if variant_selected != blank %}{% if variant_selected == text %} is-active{% endif %}{% else %}{% if count == 0 %} is-active{% endif %}{% endif %}{% endunless %}{% endif %}{% if product.options_with_values.size == 1 and variant.unavailable %} is-soldout{% endif %}" data-value="{{ text }}" data-variant-id="{{ variant.id }}" title="{{ color | strip }}" {% if variant.image != null %} data-variant-img="{{ variant.image.src | product_img_url: '800x' }}"{% endif %}>
+                                    <span
+                                        class="pattern"
+                                        style="background-color: {{ color | split: ' ' | last | handle }};{% if enable_variant_image %}{% if swatch_type == 'metafields' %}{% if color_codes %} background: {{ background_color }}{% else %} background: url({{ background_image }}); background-size: cover;{% endif %}{% else %} background-image: url({{ background_image }});{% endif %}{% endif %}"
+                                    ></span>
+                                    {{ text }}
+                                </label>
+                                <span class="tooltip">{{ color | escape }}</span>
+                            </div>
+                        {%- if forloop.last -%}
+                            </li>
+                        {%- endif -%}
+                    {%- endif -%}
+                    {%- assign count = count | plus : 1 -%}
+                    {%- capture tempList -%}
+                        {{ colorList | append: color | append: ' ' }}
+                    {%- endcapture -%}
+                    {%- assign colorList = tempList -%}
+                {%- endunless -%}
+            {%- endfor -%}
+            {%- if count > 4 -%}
+                <li class="item-more-swatch item"><button type="button" class="number-showmore" title="More Color"><span class="text-number">{{ count }} Colors</span></button></li>
+            {%- endif -%}
+        </ul>
+    </div>
+{%- endif -%}

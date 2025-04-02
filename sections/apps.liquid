@@ -1,0 +1,52 @@
+{%- liquid
+  assign container = section.settings.container
+-%}
+<div class="{% if section.settings.include_margins %}page-width {% endif %}{% if container == 'fullwidth' %}container-full{% elsif container == '1170' %}container-1170{% elsif container == '1770' %}container-1770{% else %}container{% endif %}"">
+  {%- for block in section.blocks -%}
+    {% render block %}
+  {%- endfor -%}
+</div>
+
+{% schema %}
+{
+  "name": "t:sections.apps.name",
+  "class": "spaced-section",
+  "tag": "section",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "include_margins",
+      "label": "t:sections.apps.settings.include_margins.label",
+      "default": false
+    },
+    { 
+      "type": "select",
+      "id": "container",
+      "label": "t:sections.layout.container.option",
+      "default": "container",
+      "options": [
+          {
+              "value": "container",
+              "label": "t:sections.layout.container.option1"
+          },
+          {
+              "value": "1170",
+              "label": "t:sections.layout.container.option4"
+          },
+          {
+              "value": "1770",
+              "label": "t:sections.layout.container.option3"
+          },
+          {
+              "value": "fullwidth",
+              "label": "t:sections.layout.container.option2"
+          }
+      ]
+    }
+  ],
+  "blocks": [{"type": "@app"}],
+  "presets": [{
+    "name": "t:sections.apps.presets.name"
+  }]
+}
+{% endschema %}

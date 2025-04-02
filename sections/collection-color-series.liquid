@@ -1,0 +1,83 @@
+{%- liquid
+    assign color_series = shop.metaobjects.color_series.values
+-%} 
+{{ 'color-serie.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'color-serie.js' | asset_url }}" defer="defer"></script>
+{% render 'icon-color-series' %}
+<section id="sections-collection-color-series" class="shopify-section section shop-by-color">
+  <div class="color-series no-heading">
+    <div class="collection-color-family-padding isolate container">
+      <div class="color-series_main">
+        <color-family class="style-color-family cat-0 big-style" style="--triangle-left: 371px;">
+        <div class="style-color-family-content-box">
+          <div class="color-family-list-box">
+            {% for color_serie in color_series %}
+            {% assign color_serie_name = color_serie.color_system %}
+            {% assign color_serie_colors = color_serie.colors.value %}
+            <div class="color-family-item family-{{ color_serie_name | handle }} family-{{ color_serie_name | handle }}-index">
+                <div class="family-item-content" role="button">
+                  <div class="color-img-box">
+                    <div class="ba-media half-bg color-img-border" style="--ratio-percent: 100%;">
+                      <svg class="color-serie-icon active-icon">
+                          <use xlink:href="#icon-svg-color-{{ color_serie_name | handle }}"></use>
+                      </svg>
+                    </div>
+                  </div>
+                  <div class="color-name">{{ color_serie_name }}</div>
+                </div>
+                <div class="selected-color-box">
+                  <div class="color-item">
+                    <div class="color-item-content">
+                      <span><em class="color_type">
+                          <svg class="color-serie-icon active-icon">
+                            <use xlink:href="#icon-lby_tick_white_s"></use>
+                          </svg></em></span>
+                    </div>
+                    <div class="color-item-name">
+                      <span class="text-ca"></span>
+                    </div>
+                  </div>
+                  <div class="pop-triangle-box-1"></div>
+                  <div class="pop-triangle-box-2"></div>
+                </div>
+                <div class="color-list-box family-new-in-colors-box">
+                  <div class="color-list-content">
+                    {% for color_serie_color in color_serie_colors %}
+                    {% assign color_name = color_serie_color.color %}
+                    {% assign color_collection = color_serie_color.color_collection.value %}
+                    <a aria-label="{{ color_name }}" role="button" tabindex="0" href="{{ routes.collections_url }}/{{ color_collection.handle }}" title="{{ color_name }}" class="color-item family-new-in-color-{{ color_name | handle}}">
+                      <div class="color-item-content">
+                        <div class="color_type swatch-label">
+                          <span class="color-serie-icon {{ color_name | handle }}"></span>
+                        </div>
+                      </div>
+                      <div class="color-item-name">
+                        <span class="text-ca">{{ color_name }}</span>
+                      </div>
+                    </a>
+                    {% endfor %}
+                  </div>
+                  <div class="triangle-box-1"></div>
+                  <div class="triangle-box-2"></div>
+                </div>
+            </div>
+            {% endfor %}
+         </div>
+        </div>
+        </color-family>
+      </div>
+    </div>
+  </div>
+</section>
+
+{% schema %}
+  {
+    "name": "Collection Color Series",
+    "class": "sections-collection-color-series",
+    "settings": [],
+    "presets": [{
+      "name": "Collection Color Series",
+      "category": "Custom"
+    }]
+  }
+{% endschema %}

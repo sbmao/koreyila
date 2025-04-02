@@ -1,0 +1,166 @@
+{% layout none %}<?xml version="1.0"?>
+<rss xmlns:g="http://base.google.com/ns/1.0" version="2.0">
+{%- paginate collection.products by 5000 -%}
+{%- assign CountryCode = 'US' -%}
+{%- assign PriceAdjustment = 1.0 -%}
+{%- assign PriceAdjustmentEffectiveDate =  '20181226T080000-0500/20190102T235900-0800' -%}
+{%- assign CountryParam = '&currency=' | append: cart.currency.iso_code | append: '&country=' | append: localization.country.iso_code -%}
+{%- assign size_ck = 'サイズ,TAILLE,size,sizes,Größe'  -%}
+{%- assign get_size = size_ck | downcase | replace: ' ,', ',' | replace: ', ', ',' | split: ',' | uniq -%}
+
+<channel>
+<title>{{ shop.name }} {{ collection.title | replace: '&', '&amp;' }}</title>
+<link>{{ shop.url }}</link>
+<description>{{ collection.description | strip_html }}</description>
+{%- for product in collection.products -%} 
+  {%- assign GoogleProductCategory = 'Apparel & Accessories > Clothing > Dresses' -%}
+  {%- assign Gender = 'Women' -%}
+  {%- assign AgeGroup = 'Adult' -%}
+  {%- assign Color = "Grey" -%}
+  {%- assign Size = "" -%}
+
+  {% assign labels = "" %}
+  {% assign labels1 = "" %}
+  
+  {% if product.collections.size > 0 %}
+    {% for collection in product.collections %}
+      {% case collection.handle %}
+        {% when "sequin-prom-dresses" %}
+          {% assign labels = labels | append: "sequin" | append: "_" %}
+      {% endcase %}
+    {% endfor %}
+  {% endif %}
+
+
+  {% if product.metafields.custom.product_fabric.value %}
+    {% assign fabricText = product.metafields.custom.product_fabric  | metafield_text | downcase %}
+    {% if fabricText contains "lace" %}
+      {% assign labels = labels | append: "lace" | append: "_" %}
+    {% endif %}
+    
+    {% if fabricText contains "satin" or fabricText contains "taffeta"  %}
+      {% assign labels = labels | append: "satin" | append: "_" %}
+    {% endif %}
+    
+    {% if fabricText contains "tulle" or fabricText contains "chiffon" or fabricText contains "jersey" %}
+      {% assign labels = labels | append: "chiffon" | append: "_" %}
+    {% endif %}
+  {% endif %}
+  {% assign labels = labels | slice: 0, labels.size | replace_last: "_", "" %}
+
+  {%- if product.variants.size > 0 -%}
+  {%- for variant in product.variants -%}
+    {%- for option in product.options -%}
+      {%- assign optionName = option | downcase -%}
+  	  {%- if option == 'Color' -%}{% capture Color %}{{ variant.options[forloop.index0] }}{% endcapture %}
+  	  {%- elsif get_size contains optionName -%}{% capture Size %}{{ variant.options[forloop.index0]  | remove: 'US ' }}{% endcapture %}
+  	  {%- endif -%}
+    {%- endfor -%}
+    {%- if Size contains 'W' or Size contains 'C'  -%}
+      {% continue %}
+    {% endif %}
+    {%- if Size == '4' or Size == '6'  -%}
+      {% assign labels1 = "main-size" %}
+    {% else %}
+      {% assign labels1 = "" %}
+      {% continue %}
+    {% endif %}
+    
+    {% assign additional_images = product.images %}
+    {% comment %} Calculate Sales vs Base Pricing {% endcomment %} 
+    {%- if variant.compare_at_price == blank -%}
+      {%- assign BasePrice = variant.price -%}
+    {%- else -%}
+      {%- assign BasePrice = variant.compare_at_price -%}
+    {%- endif -%}
+    {%- assign SalePrice = variant.price | times: PriceAdjustment -%}
+
+<item>
+<title>{{ product.title | strip_html | strip_newlines | replace: '&', '&amp;' | replace: 'Maxi Dress', 'Prom Dress' }} {{ variant.title | strip_html | strip_newlines | replace: '&', '&amp;' }}</title>
+<link>{{ shop.url }}{{ variant.url }}{{ CountryParam | strip_html | replace: '&', '&amp;' }}</link>
+<description>{{ product.title | strip_html | strip_newlines | replace: '&', '&amp;' }} {{ product.description | replace: '</', ' </' | strip_html | strip_newlines | replace: '&', '&amp;' }}</description>
+<g:google_product_category>{{ GoogleProductCategory | replace: '&', '&amp;'  }}</g:google_product_category>
+<g:item_group_id>shopify_{{ CountryCode }}_{{ product.id }}</g:item_group_id>
+<g:id>shopify_{{ CountryCode }}_{{ product.id }}_{{ variant.id }}</g:id>
+<g:condition>new</g:condition>
+<g:price>{{ cart.currency.iso_code }} {{ BasePrice | money_without_currency }}</g:price>
+{%- if SalePrice < BasePrice -%}<g:sale_price>{{ cart.currency.iso_code }} {{ SalePrice  | money_without_currency }}</g:sale_price>{%-  endif -%}
+{%- if PriceAdjustment < 1 -%}<g:sale_price_effective_date>{{ PriceAdjustmentEffectiveDate }}</g:sale_price_effective_date>{%- endif -%}
+<g:availability>{% if variant.available %}in stock{% else %}out of stock{% endif %}</g:availability>
+<g:image_link>http:{% if variant.image.src %}{{ variant.image.src | image_url: width: 1080, height: 1080, pad_color: 'ffffff' | replace: '&', '&amp;' }}{% else %}{{ product.featured_image.src | image_url: width: 1080, height: 1080, pad_color: 'ffffff' | replace: '&', '&amp;'}}{% endif %}</g:image_link>
+{% if additional_images.size > 1 %}
+  {%- for image in additional_images offset:1 limit:10 -%}
+  <g:additional_image_link>https:{{ image.src | image_url: width: 1080, height: 1080, pad_color: 'ffffff' | replace: '&', '&amp;'}}</g:additional_image_link>
+  {% endfor %}
+{% endif %}
+<g:brand>{{ product.vendor }}</g:brand>
+<g:mpn>{{ variant.id }}</g:mpn>
+<g:product_type>{{ product.type | replace: '&', '&amp;' }}</g:product_type>
+<g:age_group>{{ AgeGroup }}</g:age_group>
+{% unless Color == "" %}<g:color>{{ Color | strip_html | strip_newlines | replace: '&', '&amp;' }}</g:color>{% endunless %}
+{% unless Size == "" %}<g:size>{{ Size | strip_html | strip_newlines | replace: '&', '&amp;' }}</g:size><g:size_system>US</g:size_system>{% endunless %}
+<g:gender>{{ Gender }}</g:gender>
+<g:custom_label_0>{{ labels | strip_html | strip_newlines | replace: '&', '&amp;' }}</g:custom_label_0>
+<g:custom_label_1>{{ labels1 | strip_html | strip_newlines | replace: '&', '&amp;'}}</g:custom_label_1>
+<g:custom_label_2>{{ product.metafields.mm-google-shopping.custom_label_2 | strip_html | strip_newlines | replace: '&', '&amp;'}}</g:custom_label_2>
+<g:custom_label_3>{{ product.metafields.mm-google-shopping.custom_label_3 | strip_html | strip_newlines | replace: '&', '&amp;'}}</g:custom_label_3>
+<g:custom_label_4>{{ product.metafields.mm-google-shopping.custom_label_4 | strip_html | strip_newlines | replace: '&', '&amp;'}}</g:custom_label_4>
+<g:shipping_weight>{{ variant.weight | weight_with_unit }}</g:shipping_weight>
+{% unless Size == "" %}
+<g:product_detail>
+    <g:section_name>Variant</g:section_name>
+    <g:attribute_name>size</g:attribute_name>
+    <g:attribute_value>{{ Size | strip_html | strip_newlines | replace: '&', '&amp;' }}</g:attribute_value>
+</g:product_detail>
+{% endunless %}
+{% unless Color == "" %}
+<g:product_detail>
+    <g:section_name>Variant</g:section_name>
+    <g:attribute_name>color</g:attribute_name>
+    <g:attribute_value>{{ Color | strip_html | strip_newlines | replace: '&', '&amp;' }}</g:attribute_value>
+</g:product_detail>
+{% endunless %}
+</item>
+
+    {% endfor %}
+  {% else %}
+
+  {% comment %} Calculate Sales vs Base Pricing {% endcomment %} 
+  {%- if product.compare_at_price_min == blank -%}
+    {%- assign BasePrice = product.price -%}
+  {%- else -%}
+    {%- assign BasePrice = product.compare_at_price_min -%}
+  {%- endif -%}
+  {%- assign SalePrice = product.price | times: PriceAdjustment -%}
+
+<item>
+<title>{{ product.title | strip_html | strip_newlines | replace: '&', '&amp;' }}</title>
+<link>{{ shop.url }}{{ product.url }}?{{ CountryParam | strip_html | replace: '&', '&amp;' }}</link>
+<description>{{ product.title | strip_html | strip_newlines | replace: '&', '&amp;' }} {{ product.description | replace: '</', ' </' | strip_html | strip_newlines | replace: '&', '&amp;' }}</description>
+<g:google_product_category>{{ GoogleProductCategory | replace: '&', '&amp;'  }}</g:google_product_category>
+<g:item_group_id>shopify_{{ CountryCode }}_{{ product.id }}</g:item_group_id>
+<g:id>shopify_{{ CountryCode }}_{{ product.id }}</g:id>
+<g:condition>new</g:condition>
+<g:price>{{ cart.currency.iso_code }} {{ BasePrice | money_without_currency }}</g:price>
+{%- if SalePrice < BasePrice -%}<g:sale_price>{{ cart.currency.iso_code }} {{ SalePrice  | money_without_currency }}</g:sale_price>{%-  endif -%}
+{%- if PriceAdjustment < 1 -%}<g:sale_price_effective_date>{{ PriceAdjustmentEffectiveDate }}</g:sale_price_effective_date>{%- endif -%}
+<g:availability>{% if product.available %}in stock{% else %}out of stock{% endif %}</g:availability>
+<g:image_link>http:{{ product.featured_image.src | image_url: width: 1080, height: 1080, pad_color: 'ffffff' | replace: '&', '&amp;'}}</g:image_link>
+<g:gtin>{{ product.barcode }}</g:gtin>
+<g:brand>{{ product.vendor }}</g:brand>
+<g:mpn>{{ product.id }}</g:mpn>
+<g:product_type>{{ product.type }}</g:product_type>
+<g:age_group>{{ AgeGroup }}</g:age_group>
+<g:gender>{{ Gender }}</g:gender>
+<g:custom_label_0>{{ product.metafields.mm-google-shopping.custom_label_0 | strip_html | strip_newlines | replace: '&', '&amp;' }}</g:custom_label_0>
+<g:custom_label_1>{{ product.metafields.mm-google-shopping.custom_label_1 | strip_html | strip_newlines | replace: '&', '&amp;'}}</g:custom_label_1>
+<g:custom_label_2>{{ product.metafields.mm-google-shopping.custom_label_2 | strip_html | strip_newlines | replace: '&', '&amp;'}}</g:custom_label_2>
+<g:custom_label_3>{{ product.metafields.mm-google-shopping.custom_label_3 | strip_html | strip_newlines | replace: '&', '&amp;'}}</g:custom_label_3>
+<g:custom_label_4>{{ product.metafields.mm-google-shopping.custom_label_4 | strip_html | strip_newlines | replace: '&', '&amp;'}}</g:custom_label_4>
+<g:shipping_weight>{{ variant.weight | weight_with_unit }}</g:shipping_weight>
+</item>
+  {% endif %}
+{% endfor %}
+</channel>
+</rss>
+{% endpaginate %}

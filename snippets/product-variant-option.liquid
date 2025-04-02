@@ -1,0 +1,218 @@
+<div class="custom-size-box" data-custom-size-box="" style="display: none;">
+  <div class="size-unit">
+    <span class="unit">IN</span>
+    <div class="unit-switch left" data-name="properties[Unit]"><span class="switch-icon"></span></div>
+    <span class="unit">CM</span>
+  </div>
+  <div class="custom_size_form">
+    <div class="size_des">
+      <p data-customize-option-desc=""><span>Bust<span class="required">*</span>: </span>Wear the bra you will be wearing with the dress, and pull the tape across the fullest part of the bust.</p>
+    </div>
+    <div class="size_form">
+      <ul class="dress_ul">
+        <li>
+          <div class="label">
+            <span class="name">Bust<span class="required">*</span>:</span>
+            <label data-description="Wear the bra you will be wearing with the dress, and pull the tape across the fullest part of the bust.">
+              <span style="display: none;"> text </span>
+              <select class="select" data-option="Bust" data-name="properties[Bust]">
+                <option value="">-- Please Select --</option>
+                {% assign BustInch = "30, 30.5, 31, 31.5, 32, 32.5, 33, 33.5, 34, 34.5, 35, 35.5, 36, 36.5, 37, 37.5, 38, 38.5, 39, 39.5, 40, 40.5, 41, 41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5, 46, 46.5, 47, 47.5, 48, 48.5, 49, 49.5, 50, 50.5, 51, 51.5, 52, 52.5, 53, 53.5, 54, 54.5, 55, 55.5, 56" | split: "," %}
+                {% for i in BustInch %}
+                  <option value="{{ i }}" class="inch-option">{{ i | round: 1 }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <span class="unit_item">(in)
+              <a href="javascript:void(0)" class="faq"><svg t="1698840869015" class="icon icon-faq" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5696" aria-hidden="true" focusable="false">
+  <path d="M512 0c-282.88 0-512 229.12-512 512 0 282.88 229.184 512 512 512 282.816 0 512-229.12 512-512C1024 229.12 794.88 0 512 0L512 0zM520.896 918.592c-46.528 0-84.032-37.632-84.032-84.032s37.568-84.032 84.032-84.032c46.4 0 83.968 37.568 83.968 84.032C605.376 880.448 567.296 918.592 520.896 918.592L520.896 918.592zM742.144 416.96c-11.52 24-33.856 51.648-68.352 85.12-38.016 36.48-53.76 53.76-60.48 62.144C605.376 574.08 599.104 585.536 595.52 599.616c-4.096 14.656-6.272 36.032-5.76 62.656l0.512 31.36L445.696 693.632l0-30.784c0-38.144 3.136-68.352 9.408-91.904 6.72-24.512 16.64-46.464 30.272-64.704 12.48-17.28 33.344-40.768 63.616-72.576C583.488 398.208 597.12 380.992 601.728 372.608c3.136-5.248 8.384-17.216 8.384-45.376 0-19.328-6.72-36.032-20.864-51.712-13.568-14.592-33.984-21.376-62.08-21.376-83.008 0-94.528 59.52-94.528 117.952l0 30.784L287.552 402.88 288.64 371.584c1.472-49.088 7.232-86.08 18.24-113.28C317.824 230.656 336.128 205.568 360.128 183.68c23.424-21.376 50.624-37.056 79.296-46.976 28.672-9.92 58.944-14.656 90.304-14.656 64.192 0 118.976 19.328 162.816 57.92l0 0c44.352 39.68 67.264 92.352 67.264 157.12C759.872 365.312 754.112 392.448 742.144 416.96L742.144 416.96z" fill="currentColor" p-id="5697"></path>
+</svg>
+<div class="text-tip az_v_directive_track">
+                  <span class="big-card big-card-measure">
+                    How to properly measure your bust size?
+                    <img src="https://cdn.shopify.com/s/files/1/0779/3927/8130/files/Bust_properties.webp?v=1700543507&amp;width=350" alt="Bust measure guide" width="350" height="147" loading="lazy"></span>
+                </div></a></span>
+          </div>
+          <p class="notice"></p>
+        </li>
+        <li>
+          <div class="label">
+            <span class="name">Waist<span class="required">*</span>:</span>
+            <label data-description="Bend to one side to find the crease, that's your natural waist. Pull tape across the narrowest part and keep tape slightly loose to allow for breathing room.">
+             <select class="select" data-option="Waist" data-name="properties[Waist]">
+                <option value="">-- Please Select --</option>
+                {% assign WaistInch = "24.5, 25, 25.5, 26, 26.5, 27, 27.5, 28, 28.5, 29, 29.5, 30, 30.5, 31, 31.5, 32, 32.5, 33, 33.5, 34, 34.5, 35, 35.5, 36, 36.5, 37, 37.5, 38, 38.5, 39, 39.5, 40, 40.5, 41, 41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5, 46, 46.5, 47, 47.5, 48, 48.5, 49, 49.5, 50, 50.5, 51, 51.5, 52, 52.5, 53" | split: "," %}
+                {% for i in WaistInch %}
+                  <option value="{{ i }}" class="inch-option">{{ i | round: 1 }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <span class="unit_item">(in)
+              <a href="javascript:void(0)" class="faq"><svg t="1698840869015" class="icon icon-faq" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5696" aria-hidden="true" focusable="false">
+  <path d="M512 0c-282.88 0-512 229.12-512 512 0 282.88 229.184 512 512 512 282.816 0 512-229.12 512-512C1024 229.12 794.88 0 512 0L512 0zM520.896 918.592c-46.528 0-84.032-37.632-84.032-84.032s37.568-84.032 84.032-84.032c46.4 0 83.968 37.568 83.968 84.032C605.376 880.448 567.296 918.592 520.896 918.592L520.896 918.592zM742.144 416.96c-11.52 24-33.856 51.648-68.352 85.12-38.016 36.48-53.76 53.76-60.48 62.144C605.376 574.08 599.104 585.536 595.52 599.616c-4.096 14.656-6.272 36.032-5.76 62.656l0.512 31.36L445.696 693.632l0-30.784c0-38.144 3.136-68.352 9.408-91.904 6.72-24.512 16.64-46.464 30.272-64.704 12.48-17.28 33.344-40.768 63.616-72.576C583.488 398.208 597.12 380.992 601.728 372.608c3.136-5.248 8.384-17.216 8.384-45.376 0-19.328-6.72-36.032-20.864-51.712-13.568-14.592-33.984-21.376-62.08-21.376-83.008 0-94.528 59.52-94.528 117.952l0 30.784L287.552 402.88 288.64 371.584c1.472-49.088 7.232-86.08 18.24-113.28C317.824 230.656 336.128 205.568 360.128 183.68c23.424-21.376 50.624-37.056 79.296-46.976 28.672-9.92 58.944-14.656 90.304-14.656 64.192 0 118.976 19.328 162.816 57.92l0 0c44.352 39.68 67.264 92.352 67.264 157.12C759.872 365.312 754.112 392.448 742.144 416.96L742.144 416.96z" fill="currentColor" p-id="5697"></path>
+</svg>
+<div class="text-tip az_v_directive_track">
+                  <span class="big-card big-card-measure">
+                    How to properly measure your waist size?
+                    <img src="https://cdn.shopify.com/s/files/1/0779/3927/8130/files/Waist_properties.webp?v=1700543597&amp;width=350" alt="Waist measure guide" width="350" height="147" loading="lazy"></span>
+                </div></a></span>
+          </div>
+          <p class="notice"></p>
+        </li>
+        <li>
+          <div class="label">
+            <span class="name">Hips<span class="required">*</span>:</span>
+            <label data-description="Stand straight and pull tape across the widest part of the hips and rear.">
+              <span style="display: none;"> text </span>
+              <select class="select" data-option="Hips" data-name="properties[Hips]">
+                <option value="">-- Please Select --</option>
+                {% assign HipsInch = "34.5, 35, 35.5, 36, 36.5, 37, 37.5, 38, 38.5, 39, 39.5, 40, 40.5, 41, 41.5, 42, 42.5, 43, 43.5, 44, 44.5, 45, 45.5, 46, 46.5, 47, 47.5, 48, 48.5, 49, 49.5, 50, 50.5, 51, 51.5, 52, 52.5, 53, 53.5, 54, 54.5, 55, 55.5, 56, 56.5, 57, 57.5, 58, 58.5, 59, 59.5, 60, 60.5, 61, 61.5, 62, 62.5, 63" | split: "," %}
+                {% for i in HipsInch %}
+                  <option value="{{ i }}" class="inch-option">{{ i | round: 1 }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <span class="unit_item">(in)
+              <a href="javascript:void(0)" class="faq"><svg t="1698840869015" class="icon icon-faq" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5696" aria-hidden="true" focusable="false">
+  <path d="M512 0c-282.88 0-512 229.12-512 512 0 282.88 229.184 512 512 512 282.816 0 512-229.12 512-512C1024 229.12 794.88 0 512 0L512 0zM520.896 918.592c-46.528 0-84.032-37.632-84.032-84.032s37.568-84.032 84.032-84.032c46.4 0 83.968 37.568 83.968 84.032C605.376 880.448 567.296 918.592 520.896 918.592L520.896 918.592zM742.144 416.96c-11.52 24-33.856 51.648-68.352 85.12-38.016 36.48-53.76 53.76-60.48 62.144C605.376 574.08 599.104 585.536 595.52 599.616c-4.096 14.656-6.272 36.032-5.76 62.656l0.512 31.36L445.696 693.632l0-30.784c0-38.144 3.136-68.352 9.408-91.904 6.72-24.512 16.64-46.464 30.272-64.704 12.48-17.28 33.344-40.768 63.616-72.576C583.488 398.208 597.12 380.992 601.728 372.608c3.136-5.248 8.384-17.216 8.384-45.376 0-19.328-6.72-36.032-20.864-51.712-13.568-14.592-33.984-21.376-62.08-21.376-83.008 0-94.528 59.52-94.528 117.952l0 30.784L287.552 402.88 288.64 371.584c1.472-49.088 7.232-86.08 18.24-113.28C317.824 230.656 336.128 205.568 360.128 183.68c23.424-21.376 50.624-37.056 79.296-46.976 28.672-9.92 58.944-14.656 90.304-14.656 64.192 0 118.976 19.328 162.816 57.92l0 0c44.352 39.68 67.264 92.352 67.264 157.12C759.872 365.312 754.112 392.448 742.144 416.96L742.144 416.96z" fill="currentColor" p-id="5697"></path>
+</svg>
+<div class="text-tip az_v_directive_track">
+                  <span class="big-card big-card-measure">
+                    How to properly measure your hips size?
+                    <img src="https://cdn.shopify.com/s/files/1/0779/3927/8130/files/Hips_properties.webp?v=1700543663&amp;width=350" alt="Hips measure guide" width="350" height="147" loading="lazy"></span>
+                </div></a></span>
+          </div>
+          <p class="notice"></p>
+        </li>
+        <li>
+          <div class="label">
+            <span class="name">Hollow to Floor<span class="required">*</span>:</span>
+            <label data-description="Stand straight with bare feet together and measure from the center of the collarbone to the floor.">
+              <span style="display: none;"> text </span>
+              <select class="select" data-option="Hollow to Floor" data-name="properties[Hollow to Floor]">
+               <option value="">-- Please Select --</option>
+              {% assign HollowToFloorInch = "47, 47.5, 48, 48.5, 49, 49.5, 50, 50.5, 51, 51.5, 52, 52.5, 53, 53.5, 54, 54.5, 55, 55.5, 56, 56.5, 57, 57.5, 58, 58.5, 59, 59.5, 60, 60.5, 61, 61.5, 62, 62.5, 63, 63.5, 64, 64.5, 65, 65.5, 66, 66.5, 67, 67.5, 68, 68.5, 69, 69.5, 70, 70.5, 71, 71.5, 72, 72.5, 73, 73.5, 74, 74.5, 75" | split: "," %}
+              {% for i in HollowToFloorInch %}
+                <option value="{{ i }}" class="inch-option">{{ i | round: 1 }}</option>
+              {% endfor %}
+            </select>
+            </label>
+            <span class="unit_item">(in)
+              <a href="javascript:void(0)" class="faq"><svg t="1698840869015" class="icon icon-faq" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5696" aria-hidden="true" focusable="false">
+  <path d="M512 0c-282.88 0-512 229.12-512 512 0 282.88 229.184 512 512 512 282.816 0 512-229.12 512-512C1024 229.12 794.88 0 512 0L512 0zM520.896 918.592c-46.528 0-84.032-37.632-84.032-84.032s37.568-84.032 84.032-84.032c46.4 0 83.968 37.568 83.968 84.032C605.376 880.448 567.296 918.592 520.896 918.592L520.896 918.592zM742.144 416.96c-11.52 24-33.856 51.648-68.352 85.12-38.016 36.48-53.76 53.76-60.48 62.144C605.376 574.08 599.104 585.536 595.52 599.616c-4.096 14.656-6.272 36.032-5.76 62.656l0.512 31.36L445.696 693.632l0-30.784c0-38.144 3.136-68.352 9.408-91.904 6.72-24.512 16.64-46.464 30.272-64.704 12.48-17.28 33.344-40.768 63.616-72.576C583.488 398.208 597.12 380.992 601.728 372.608c3.136-5.248 8.384-17.216 8.384-45.376 0-19.328-6.72-36.032-20.864-51.712-13.568-14.592-33.984-21.376-62.08-21.376-83.008 0-94.528 59.52-94.528 117.952l0 30.784L287.552 402.88 288.64 371.584c1.472-49.088 7.232-86.08 18.24-113.28C317.824 230.656 336.128 205.568 360.128 183.68c23.424-21.376 50.624-37.056 79.296-46.976 28.672-9.92 58.944-14.656 90.304-14.656 64.192 0 118.976 19.328 162.816 57.92l0 0c44.352 39.68 67.264 92.352 67.264 157.12C759.872 365.312 754.112 392.448 742.144 416.96L742.144 416.96z" fill="currentColor" p-id="5697"></path>
+</svg>
+<div class="text-tip az_v_directive_track">
+                  <span class="big-card big-card-measure">
+                    How to properly measure hollow to floor?
+                    <img src="https://cdn.shopify.com/s/files/1/0779/3927/8130/files/Hollow_properties.webp?v=1700543725&amp;width=350" alt="Hollow measure guide" width="350" height="250" loading="lazy"></span>
+                </div></a></span>
+          </div>
+          <p class="notice"></p>
+        </li>
+        <li>
+          <div class="label">
+            <span class="name">Height (Bare Foot)<span class="required">*</span>:</span>
+            <label data-description="Stand straight with bare feet together and measure from the top of the head to the floor.">
+              <span style="display: none;"> text </span>
+              <select class="select" data-option="Height (Bare Foot)" data-name="properties[Height (Bare Foot)]">
+                <option value="">-- Please Select --</option>
+                {% assign HeightInch = "57, 57.5, 58, 58.5, 59, 59.5, 60, 60.5, 61, 61.5, 62, 62.5, 63, 63.5, 64, 64.5, 65, 65.5, 66, 66.5, 67, 67.5, 68, 68.5, 69, 69.5, 70, 70.5, 71, 71.5, 72, 72.5, 73, 73.5, 74, 74.5, 75, 75.5, 76" | split: "," %}
+              
+                {% for i in HeightInch %}
+                  <option value="{{ i }}" class="inch-option">{{ i | round: 1 }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <span class="unit_item">(in)
+              <a href="javascript:void(0)" class="faq"><svg t="1698840869015" class="icon icon-faq" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5696" aria-hidden="true" focusable="false">
+  <path d="M512 0c-282.88 0-512 229.12-512 512 0 282.88 229.184 512 512 512 282.816 0 512-229.12 512-512C1024 229.12 794.88 0 512 0L512 0zM520.896 918.592c-46.528 0-84.032-37.632-84.032-84.032s37.568-84.032 84.032-84.032c46.4 0 83.968 37.568 83.968 84.032C605.376 880.448 567.296 918.592 520.896 918.592L520.896 918.592zM742.144 416.96c-11.52 24-33.856 51.648-68.352 85.12-38.016 36.48-53.76 53.76-60.48 62.144C605.376 574.08 599.104 585.536 595.52 599.616c-4.096 14.656-6.272 36.032-5.76 62.656l0.512 31.36L445.696 693.632l0-30.784c0-38.144 3.136-68.352 9.408-91.904 6.72-24.512 16.64-46.464 30.272-64.704 12.48-17.28 33.344-40.768 63.616-72.576C583.488 398.208 597.12 380.992 601.728 372.608c3.136-5.248 8.384-17.216 8.384-45.376 0-19.328-6.72-36.032-20.864-51.712-13.568-14.592-33.984-21.376-62.08-21.376-83.008 0-94.528 59.52-94.528 117.952l0 30.784L287.552 402.88 288.64 371.584c1.472-49.088 7.232-86.08 18.24-113.28C317.824 230.656 336.128 205.568 360.128 183.68c23.424-21.376 50.624-37.056 79.296-46.976 28.672-9.92 58.944-14.656 90.304-14.656 64.192 0 118.976 19.328 162.816 57.92l0 0c44.352 39.68 67.264 92.352 67.264 157.12C759.872 365.312 754.112 392.448 742.144 416.96L742.144 416.96z" fill="currentColor" p-id="5697"></path>
+</svg>
+<div class="text-tip az_v_directive_track">
+                  <span class="big-card big-card-measure">
+                    How to properly measure your height?
+                    <img src="https://cdn.shopify.com/s/files/1/0779/3927/8130/files/Height_properties.webp?v=1700543777&amp;width=350" alt="Height measure guide" width="350" height="250" loading="lazy"></span>
+                </div></a></span>
+          </div>
+          <p class="notice"></p>
+        </li>
+        <li>
+          <div class="label">
+            <span class="name">Extra Length<span class="required">*</span>:</span>
+            <label data-description="Use the extra length to adjust the hem for your heels! i.e. for 2&quot; heels, select &quot;+2&quot;. For flats? Select &quot;+0&quot;.">
+              <span style="display: none;"> text </span>
+              <select class="select" data-option="Extra Length"  data-name="properties[Extra Length]">
+                <option value="">-- Please Select --</option>
+                {% for i in (0..5) %}
+                  <option value="{{ i }}" class="inch-option">{{ i }}</option>
+                {% endfor %}
+              </select>
+            </label>
+            <span class="unit_item">(in)
+              <a href="javascript:void(0)" class="faq"><svg t="1698840869015" class="icon icon-faq" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" p-id="5696" aria-hidden="true" focusable="false">
+  <path d="M512 0c-282.88 0-512 229.12-512 512 0 282.88 229.184 512 512 512 282.816 0 512-229.12 512-512C1024 229.12 794.88 0 512 0L512 0zM520.896 918.592c-46.528 0-84.032-37.632-84.032-84.032s37.568-84.032 84.032-84.032c46.4 0 83.968 37.568 83.968 84.032C605.376 880.448 567.296 918.592 520.896 918.592L520.896 918.592zM742.144 416.96c-11.52 24-33.856 51.648-68.352 85.12-38.016 36.48-53.76 53.76-60.48 62.144C605.376 574.08 599.104 585.536 595.52 599.616c-4.096 14.656-6.272 36.032-5.76 62.656l0.512 31.36L445.696 693.632l0-30.784c0-38.144 3.136-68.352 9.408-91.904 6.72-24.512 16.64-46.464 30.272-64.704 12.48-17.28 33.344-40.768 63.616-72.576C583.488 398.208 597.12 380.992 601.728 372.608c3.136-5.248 8.384-17.216 8.384-45.376 0-19.328-6.72-36.032-20.864-51.712-13.568-14.592-33.984-21.376-62.08-21.376-83.008 0-94.528 59.52-94.528 117.952l0 30.784L287.552 402.88 288.64 371.584c1.472-49.088 7.232-86.08 18.24-113.28C317.824 230.656 336.128 205.568 360.128 183.68c23.424-21.376 50.624-37.056 79.296-46.976 28.672-9.92 58.944-14.656 90.304-14.656 64.192 0 118.976 19.328 162.816 57.92l0 0c44.352 39.68 67.264 92.352 67.264 157.12C759.872 365.312 754.112 392.448 742.144 416.96L742.144 416.96z" fill="currentColor" p-id="5697"></path>
+</svg>
+<div class="text-tip">
+                  <span class="big-card">Use the extra length option on our floor-length custom sizes to accommodate your heels! i.e for 2 inch heels, select "+2", for flats enter "+0"</span>
+                </div>
+              </a></span>
+          </div>
+          <p class="notice"></p>
+        </li>
+      </ul>
+      <div class="measure-block">
+        <div class="normal_measure">
+          <div class="img-box" data-fancybox data-src="https://cdn.shopify.com/s/files/1/0892/8745/9131/files/dress_custom.png?v=1726624602">
+            <img src="https://cdn.shopify.com/s/files/1/0892/8745/9131/files/dress_custom.png?v=1726624602" alt="dress size chart" class="size-chart-png dress" width="350" height="563" loading="lazy">
+            <i data-cat="dress" class="measure-btn"></i>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="error_suggestion" data-error-message=""></div>
+    <div class="bot-wrap">
+      <div class="return_support_notice">
+        <span>
+          <input type="checkbox" name="return_support_checkbox" id="return_support_checkbox" class="return_support_checkbox">
+          <label for="return_support_checkbox"><span class="hidden">Return support checkbox</span></label>
+        </span>
+        <span class="agree-desc">
+          I understand that custom sizing is the final sale. My order will be custom made with the measurements I provided. And I would be charged for all costs of any further alterations.
+        </span>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="size_detail_show" class="size-detail-show" style="display: none;">
+  <div class="size-unit">
+    <span class="unit">IN</span>
+    <div class="unit-switch left" data-name="properties[Unit]"><span class="switch-icon"></span></div>
+    <span class="unit">CM</span>
+  </div>
+  <div class="row-scroll">
+    {% assign sizechart_type = "prom" %}
+    {% assign sizechart = shop.metaobjects.size_chart[sizechart_type] %}
+    {% assign sizechart_config = sizechart.config.value %}
+    {% for unitsSet in sizechart_config["unitsSet"] %}
+      <table unit="{{ unitsSet[0] | downcase  }}" display="none" style="display: table;">
+        <thead>
+          <tr>
+              <td style="word-break:break-word;">Size ({{ unitsSet[0] | downcase  }})</td>
+              {% for propertySet in sizechart_config.propertySet %}
+              <td style="word-break:break-word;">{{ propertySet[1] | capitalize }}</td>
+              {% endfor %}
+          </tr>
+        </thead>
+        <tbody>
+          {% for sizeSet in sizechart_config.sizeSet %}
+            <tr size="US {{ sizeSet[0] }}" style="display: none;">
+              <td>US {{ sizeSet[0] }}</td>
+              {% for propertySet in sizechart_config.propertySet %}
+                <td>{{ sizechart_config[unitsSet[0]][propertySet[0]][sizeSet[0]]['size_value'] }}</td>
+              {% endfor %}
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% endfor %}
+  </div>
+</div>
