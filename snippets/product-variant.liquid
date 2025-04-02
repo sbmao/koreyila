@@ -15,30 +15,13 @@
     assign sorted_product_array = "" | split: ""
 -%}
 
-  {%- if product.metafields.custom.combined_main_product != blank -%}
+{%- if product.metafields.custom.combined_main_product != blank -%}
   {%- assign combined_main_product = product.metafields.custom.combined_main_product.value -%}
   {%- assign combined_products = combined_main_product.metafields.custom.combined_products.value -%}
   {% assign merged_variant = "" | split: "" %}
   {% assign unmerged_variant = "" | split: "" %}
   {% assign mark = false %}
   {% assign markdata = "" | split: "" %}
-
-  // TODO
-  {% comment %}子商品间如有重复颜色,可能有问题{% endcomment %}
-  {% for key in color_order %}
-    {% for combined_product in combined_products %}
-      {% assign options = combined_product.options_by_name['color'].values %}
-      {% assign colors = options.values | join | downcase %}
-      {% if colors contains key %}
-        {% assign merged_variant = merged_variant | concat: combined_product.variants %}
-        {% break %}
-      {% endif %}
-    {% endfor %}
-  {% endfor %}
-  {% assign merged_variant = merged_variant | concat: unmerged_variant %}
-  {% assign combined_data = "" | split: "" %}
-  //TODO
-
   {% capture combined_data %}
     [
     {% for color in color_order %}
@@ -65,30 +48,30 @@
         {
         "handle": "{{ markdata.handle }}",
         "options": {
-                                                                                                                                                                                    "color": [
-        {% for option in markdata.options_with_values %}
-          {% if option.name == "Color" %}
-            {% assign color_values = option.values %}
-            {% for color in color_values %}
-              "{{ color }}"{% unless forloop.last %},
-              {% endunless %}
+          "color": [
+            {% for option in markdata.options_with_values %}
+              {% if option.name == "Color" %}
+                {% assign color_values = option.values %}
+                {% for color in color_values %}
+                  "{{ color }}"{% unless forloop.last %},
+                  {% endunless %}
+                {% endfor %}
+              {% endif %}
             {% endfor %}
-          {% endif %}
-        {% endfor %}
-        ],
-        "size": [
-        {% for option in markdata.options_with_values %}
-          {% if option.name == "Size" %}
-            {% assign size_values = option.values %}
-            {% for size in size_values %}
-              "{{ size }}"{% unless forloop.last %},
-              {% endunless %}
+            ],
+            "size": [
+            {% for option in markdata.options_with_values %}
+              {% if option.name == "Size" %}
+                {% assign size_values = option.values %}
+                {% for size in size_values %}
+                  "{{ size }}"{% unless forloop.last %},
+                  {% endunless %}
+                {% endfor %}
+              {% endif %}
             {% endfor %}
-          {% endif %}
-        {% endfor %}
-        ]
-        }
-                                                                                                                                                                                },
+            ]
+            }
+          },
         {% continue %}
       {% endif %}
     {% endfor %}
