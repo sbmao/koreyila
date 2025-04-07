@@ -565,8 +565,9 @@
                                                             {% if product_image_popup == 'fancybox' %} data-fancybox="images" href="{{ media.preview_image | img_url: 'master' }}" {% endif %}
                                                         >
                                                             <img id="product-featured-image-{{ media.id }}"
-                                                                srcset="{{ media.preview_image | image_url: width: 780 }}"
                                                                 src="{{ media | image_url: width: 780 }}"
+                                                                srcset="{{ media.preview_image | image_url: width: 390 }} 390w, {{ media.preview_image | image_url: width: 780 }} 780w"
+                                                                sizes="(max-width: 500px) 100px, 780px"
                                                                 alt="{{ media.preview_image.alt | escape }}"
                                                                 title="{{ media.preview_image.alt | escape }}"
                                                                 width="{{ media.width }}"

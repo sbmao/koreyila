@@ -29,10 +29,10 @@
             <meta name="description" content="{{ page_description | escape }}">
         {%- endif -%}
         {% render 'meta-tags' %}
-        {{ content_for_header }}
         {% render 'variable' %}
         {% render 'global-style' %}
         {% render 'global-script' %}
+        {{ content_for_header }}
 
         <script>document.documentElement.className = document.documentElement.className.replace('no-js', 'js');</script>
 

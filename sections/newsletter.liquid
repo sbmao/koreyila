@@ -105,7 +105,7 @@
                   {%- endif -%}
                   {%- if form.posted_successfully? -%}
                     <script>
-                      $(document).ready(function () {
+                      document.addEventListener('DOMContentLoaded', () => {
                         var newsletterSuccessPopup = (function () {
                           var popup = $('.newsletter-success-modal');
                           var close = popup.find('.close');
@@ -135,7 +135,7 @@
                     </script>
                   {% else %}
                     <script>
-                      $(document).ready(function () {
+                      document.addEventListener('DOMContentLoaded', () => {
                         if (window.location.href.indexOf('newsletter&form_type=customer') > -1) {
                           var newsletterSuccessPopup = (function () {
                             var popup = $('.newsletter-success-modal');

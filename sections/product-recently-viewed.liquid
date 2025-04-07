@@ -405,50 +405,52 @@
             </div>
         </{% if layout == 'scroll' %}product-scroller{% else %}div{% endif %}>
     </{% if swipe %}product-slider-component{% else %}div{% endif %}>
-    {{ 'recently-viewed-product.js' | asset_url | script_tag }}
+    <script src="{{ 'recently-viewed-product.js' | asset_url }}" defer="defer"></script>
     <script type="text/javascript">
-        Shopify.Products.recordRecentlyViewed();
-
-        var cookieValue = $.cookie('shopify_recently_viewed');
-
-        if (Shopify.designMode && !cookieValue) {
-            cookieValue = localStorage.getItem('shopify_recently_viewed');
-        }
-
-        if (!(cookieValue !== null && cookieValue !== undefined && cookieValue !== "")){
-            $('#halo-recently-viewed-block-{{ section.id }}').remove();
-        } else {
-            var recentlyViewed = $(this.popup);
-
-            var limit = {{ limit }},
-                expireDay = {{ settings.recently_viewed_expire }};
-
-            const handler = (entries, observer) => {
-                if (!entries[0].isIntersecting || entries[0].target.matches('.ajax-loaded')) return;
-                entries[0].target.classList.add('ajax-loaded');
-                Shopify.Products.showRecentlyViewed({
-                    howManyToShow: limit,
-                    wrapperId: 'recently-viewed-products-list-2', 
-                    templateId: 'recently-viewed-product-block',
-                    layout: '{{ layout }}',
-                    swipe: {{ swipe }},
-                    media: '{{ image_ratio }}',
-                    onComplete: function() {
-                        if (window.location.pathname.indexOf('/products/') !== -1) {
-                            $.cookie('shopify_recently_viewed', cookieValue, { expires: expireDay, path: "/", domain: window.location.hostname });
-                        }
-                    }
-                });
-            }
-
-            this.recentlyViewedBlock = document.querySelector('[data-recently-viewed-block]');
-
-            const config = {
-                threshold: 0.25,
-            }
-
-            new IntersectionObserver(handler.bind(this.recentlyViewedBlock), ({}, config)).observe(this.recentlyViewedBlock);
-        }
+        document.addEventListener('DOMContentLoaded', () => {
+          Shopify.Products.recordRecentlyViewed();
+  
+          var cookieValue = $.cookie('shopify_recently_viewed');
+  
+          if (Shopify.designMode && !cookieValue) {
+              cookieValue = localStorage.getItem('shopify_recently_viewed');
+          }
+  
+          if (!(cookieValue !== null && cookieValue !== undefined && cookieValue !== "")){
+              $('#halo-recently-viewed-block-{{ section.id }}').remove();
+          } else {
+              var recentlyViewed = $(this.popup);
+  
+              var limit = {{ limit }},
+                  expireDay = {{ settings.recently_viewed_expire }};
+  
+              const handler = (entries, observer) => {
+                  if (!entries[0].isIntersecting || entries[0].target.matches('.ajax-loaded')) return;
+                  entries[0].target.classList.add('ajax-loaded');
+                  Shopify.Products.showRecentlyViewed({
+                      howManyToShow: limit,
+                      wrapperId: 'recently-viewed-products-list-2', 
+                      templateId: 'recently-viewed-product-block',
+                      layout: '{{ layout }}',
+                      swipe: {{ swipe }},
+                      media: '{{ image_ratio }}',
+                      onComplete: function() {
+                          if (window.location.pathname.indexOf('/products/') !== -1) {
+                              $.cookie('shopify_recently_viewed', cookieValue, { expires: expireDay, path: "/", domain: window.location.hostname });
+                          }
+                      }
+                  });
+              }
+  
+              this.recentlyViewedBlock = document.querySelector('[data-recently-viewed-block]');
+  
+              const config = {
+                  threshold: 0.25,
+              }
+  
+              new IntersectionObserver(handler.bind(this.recentlyViewedBlock), ({}, config)).observe(this.recentlyViewedBlock);
+          }
+        });
     </script>
 {%- endif -%}
 {% schema %}

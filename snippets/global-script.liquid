@@ -1,6 +1,5 @@
-{{ 'vendor.js' | asset_url | script_tag }}
-{{ 'global.js' | asset_url | script_tag }}
-{{ 'lazysizes.min.js' | asset_url | script_tag }}
+<script src="{{ 'vendor.js' | asset_url }}" defer="defer"></script>
+<script src="{{ 'global.min.js' | asset_url }}" defer="defer"></script>
 <!-- {{ 'menu.js' | asset_url | script_tag }} -->
 
 {%- if settings.show_quick_search -%}
@@ -53,7 +52,16 @@
     window.lazySizesConfig = window.lazySizesConfig || {};
     lazySizesConfig.loadMode = 1;
     window.lazySizesConfig.init = false;
-    lazySizes.init();
+    /* 异步加载脚本 */
+    (function(){
+      var lsScript = document.createElement('script');
+      lsScript.src = {{ 'lazysizes.min.js' | asset_url | json }};
+      lsScript.async = true;
+      lsScript.onload = function() {
+        lazySizes.init();
+      };
+      document.head.appendChild(lsScript);
+    })();
 
     window.rtl_slick = {{ enable_iso_rtl }};
     window.mobile_menu = '{{ settings.mobile_menu }}';
